@@ -1,3 +1,6 @@
+// ========== API MANZILI (Render uchun) ==========
+const API_URL = 'https://sihat-ai-eq7c.onrender.com/api/assess-risk';
+
 // ========== TIL MA'LUMOTLARI ==========
 const texts = {
     uz: {
@@ -16,7 +19,13 @@ const texts = {
         settings: "⚙️ Sozlamalar",
         saveHistory: "So'rovlar tarixini saqlash",
         darkMode: "Qorong'u rejim",
-        saveBtn: "Saqlash"
+        saveBtn: "Saqlash",
+        risk: "Xavf darajasi",
+        score: "Ball",
+        recommendations: "Tavsiyalar",
+        deadline: "Muddat",
+        loading: "⏳ Tahlil qilinmoqda...",
+        error: "Serverga ulanishda xatolik! Backend ishlayotganligini tekshiring."
     },
     en: {
         tagline: "Assess your health with artificial intelligence",
@@ -34,7 +43,13 @@ const texts = {
         settings: "⚙️ Settings",
         saveHistory: "Save history",
         darkMode: "Dark mode",
-        saveBtn: "Save"
+        saveBtn: "Save",
+        risk: "Risk level",
+        score: "Score",
+        recommendations: "Recommendations",
+        deadline: "Deadline",
+        loading: "⏳ Analyzing...",
+        error: "Connection error! Please check if backend is running."
     },
     ru: {
         tagline: "Оцените свое здоровье с помощью ИИ",
@@ -52,12 +67,19 @@ const texts = {
         settings: "⚙️ Настройки",
         saveHistory: "Сохранять историю",
         darkMode: "Темный режим",
-        saveBtn: "Сохранить"
+        saveBtn: "Сохранить",
+        risk: "Уровень риска",
+        score: "Балл",
+        recommendations: "Рекомендации",
+        deadline: "Срок",
+        loading: "⏳ Анализ...",
+        error: "Ошибка подключения! Проверьте работу бэкенда."
     }
 };
 
 let currentLang = 'uz';
 
+// ========== TILNI O'ZGARTIRISH ==========
 function changeLanguage(lang) {
     currentLang = lang;
     const t = texts[lang];
@@ -82,7 +104,7 @@ function changeLanguage(lang) {
     localStorage.setItem('language', lang);
 }
 
-// ========== SOZLAMALAR ==========
+// ========== SOZLAMALARNI SAQLASH ==========
 function saveSettings() {
     const saveHistory = document.getElementById('saveHistory').checked;
     const darkMode = document.getElementById('darkMode').checked;
@@ -99,6 +121,7 @@ function saveSettings() {
     alert(texts[currentLang].saveBtn + " ✓");
 }
 
+// ========== SOZLAMALARNI YUKLASH ==========
 function loadSettings() {
     const saveHistory = localStorage.getItem('saveHistory') === 'true';
     const darkMode = localStorage.getItem('darkMode') === 'true';
@@ -118,6 +141,60 @@ function loadSettings() {
     }
 }
 
+// ========== NATIJANI CHIROYLI KO'RSATISH ==========
+function displayResult(data, container) {
+    const risk = data.risk_assessment;
+    const user = data.user_info;
+    const recs = data.recommendations;
+    const t = texts[currentLang];
+    
+    let riskClass = '';
+    let riskIcon = '';
+    if (risk.risk_level === 'YUQORI') {
+        riskClass = 'risk-high';
+        riskIcon = '🔴';
+    } else if (risk.risk_level === "O'RTA") {
+        riskClass = 'risk-medium';
+        riskIcon = '🟠';
+    } else {
+        riskClass = 'risk-low';
+        riskIcon = '🟢';
+    }
+    
+    let html = `
+        <div class="${riskClass}">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong>${riskIcon} ${t.risk}: ${risk.risk_level}</strong>
+                <span style="background: white; padding: 0.2rem 0.8rem; border-radius: 2rem;">${t.score}: ${risk.risk_score}/100</span>
+            </div>
+            <progress value="${risk.risk_score}" max="100" style="width:100%; height:8px; border-radius:10px; margin-top:8px;"></progress>
+        </div>
+        
+        <div style="margin: 1rem 0;">
+            <strong>👤 ${t.age}: ${user.age}</strong><br>
+            <strong>${t.gender}: ${user.gender === 'male' ? t.male : t.female}</strong><br>
+            <strong>BMI:</strong> ${user.bmi} (${user.bmi_category})
+        </div>
+        
+        <div><strong>💡 ${t.recommendations}</strong></div>
+    `;
+    
+    recs.forEach(rec => {
+        let priorityEmoji = rec.priority === 'yuqori' ? '❗' : (rec.priority === "o'rta" ? '⚠️' : '✅');
+        html += `
+            <div class="recommendation">
+                <span>${priorityEmoji}</span>
+                <div>
+                    <strong>${rec.text}</strong><br>
+                    <small>📅 ${t.deadline}: ${rec.deadline}</small>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
 // ========== ASOSIY FORMA ==========
 document.getElementById('healthForm').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -135,49 +212,42 @@ document.getElementById('healthForm').addEventListener('submit', async function(
     const resultDiv = document.getElementById('result');
     const resultContent = document.getElementById('resultContent');
     resultDiv.style.display = 'block';
-    resultContent.innerHTML = '⏳ Tahlil qilinmoqda...';
+    resultContent.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><span>${texts[currentLang].loading}</span></div>`;
     
     try {
-        const response = await fetch('http://127.0.0.1:8000/api/assess-risk', {
+        const response = await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
         
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
         const result = await response.json();
         
         if (result.success) {
-            const d = result.data;
-            const risk = d.risk_assessment;
-            const user = d.user_info;
+            displayResult(result.data, resultContent);
             
-            let riskClass = risk.risk_level === 'YUQORI' ? 'risk-high' : (risk.risk_level === "O'RTA" ? 'risk-medium' : 'risk-low');
-            
-            let html = `
-                <div class="${riskClass}">
-                    <strong>Xavf darajasi: ${risk.risk_level}</strong><br>
-                    Ball: ${risk.risk_score}/100
-                </div>
-                <div>
-                    <strong>Yosh:</strong> ${user.age}<br>
-                    <strong>Jins:</strong> ${user.gender === 'male' ? 'Erkak' : 'Ayol'}<br>
-                    <strong>BMI:</strong> ${user.bmi} (${user.bmi_category})
-                </div>
-                <div><strong>Tavsiyalar:</strong></div>
-            `;
-            
-            d.recommendations.forEach(rec => {
-                html += `<div class="recommendation">❗ ${rec.text}<br><small>Muddat: ${rec.deadline}</small></div>`;
-            });
-            
-            resultContent.innerHTML = html;
+            if (document.getElementById('saveHistory').checked) {
+                let history = JSON.parse(localStorage.getItem('healthHistory') || '[]');
+                history.unshift({
+                    date: new Date().toLocaleString(),
+                    data: data,
+                    result: result.data
+                });
+                if (history.length > 10) history.pop();
+                localStorage.setItem('healthHistory', JSON.stringify(history));
+            }
         } else {
-            resultContent.innerHTML = '<div class="risk-high">Xatolik yuz berdi</div>';
+            resultContent.innerHTML = `<div class="risk-high">❌ Xatolik: ${result.detail || "Noma'lum xato"}</div>`;
         }
     } catch (error) {
-        resultContent.innerHTML = '<div class="risk-high">Serverga ulanishda xatolik! Backend ishlayotganligini tekshiring.</div>';
+        console.error('Fetch error:', error);
+        resultContent.innerHTML = `<div class="risk-high">❌ ${texts[currentLang].error}<br>${error.message}</div>`;
     }
 });
 
-// Sahifa yuklanganda
+// ========== SAHIFA YUKLANGANDA ==========
 loadSettings();
