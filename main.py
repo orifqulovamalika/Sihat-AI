@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from app.api import health
+from backend.app.api import health
 
 app = FastAPI(
     title="Sihat AI Health Platform",
