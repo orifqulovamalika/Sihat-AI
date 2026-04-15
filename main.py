@@ -3,13 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from backend.app.api import health
 
-app = FastAPI(
-    title="Sihat AI Health Platform",
-    description="Sun'iy intellekt asosidagi sog'liqni baholash platformasi",
-    version="1.0.0"
-)
+app = FastAPI()
 
-# CORS sozlamalari
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,15 +13,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# API routerlarni ulash
 app.include_router(health.router)
-
-# Frontend papkasini statik qilib ulash
 app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
 @app.get("/")
 def root():
-    return {"message": "Sihat AI API ishga tushdi!"}
+    return {"message": "Sihat AI API"}
 
 @app.get("/hello/{name}")
 def say_hello(name: str):
