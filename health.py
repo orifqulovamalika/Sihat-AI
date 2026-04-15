@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
-from app.ml.risk_model import HealthRiskModel
+from backend.app.ml.risk_model import HealthRiskModel
 
 router = APIRouter(prefix="/api", tags=["Health Assessment"])
 model = HealthRiskModel()
