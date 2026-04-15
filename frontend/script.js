@@ -1,6 +1,5 @@
 // ========== API MANZILI (Render uchun) ==========
 const API_URL = 'https://sihat-ai-eq7c.onrender.com/api/assess-risk';
-
 // ========== TIL MA'LUMOTLARI ==========
 const texts = {
     uz: {
