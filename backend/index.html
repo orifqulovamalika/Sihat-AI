@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHATAI - Sog'liqni baholash</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="health-card">
+            <div class="header">
+                <!-- Til tanlash tugmalari -->
+                <div class="language-selector">
+                    <button type="button" class="lang-btn" onclick="changeLanguage('uz')">UZ O'zbek</button>
+                    <button type="button" class="lang-btn" onclick="changeLanguage('en')">EN English</button>
+                    <button type="button" class="lang-btn" onclick="changeLanguage('ru')">RU Русский</button>
+                </div>
+                
+                <div class="logo">
+                    <span class="logo-icon">🏥</span>
+                    <span class="logo-text">Sihat AI</span>
+                </div>
+                <p class="tagline" id="tagline">Sun'iy intellekt asosida sog'lig'ingizni baholang</p>
+            </div>
+
+            <form id="healthForm" class="health-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label id="ageLabel">Yosh</label>
+                        <input type="number" id="age" value="45" required>
+                    </div>
+                    <div class="form-group">
+                        <label id="genderLabel">Jins</label>
+                        <select id="gender">
+                            <option value="male" id="maleOption">Erkak</option>
+                            <option value="female" id="femaleOption">Ayol</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label id="heightLabel">Bo'y (sm)</label>
+                        <input type="number" id="height" value="170" required>
+                    </div>
+                    <div class="form-group">
+                        <label id="weightLabel">Vazn (kg)</label>
+                        <input type="number" id="weight" value="85" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label id="bpLabel">Qon bosimi</label>
+                    <input type="text" id="bloodPressure" placeholder="120/80" value="140/90">
+                </div>
+
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="smoking"> <span id="smokingLabel">Chekaman</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="familyHistory"> <span id="familyLabel">Oilada kasallik bor</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-primary" id="submitBtn">
+                    🔍 BAHOLASH
+                </button>
+            </form>
+
+            <!-- Sozlamalar paneli -->
+            <div class="settings-panel">
+                <h4 id="settingsTitle">⚙️ Sozlamalar</h4>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="saveHistory"> <span id="saveHistoryLabel">So'rovlar tarixini saqlash</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="darkMode"> <span id="darkModeLabel">Qorong'u rejim</span>
+                </label>
+                <button type="button" onclick="saveSettings()" class="settings-btn" id="saveSettingsBtn">Saqlash</button>
+            </div>
+
+            <div id="result" class="result-card" style="display: none;">
+                <div class="result-header">
+                    <span id="resultTitle">📊 Sog'liq hisoboti</span>
+                </div>
+                <div id="resultContent"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

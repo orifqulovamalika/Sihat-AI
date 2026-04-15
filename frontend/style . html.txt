@@ -1,0 +1,22 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #667eea;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+h1 { color: #333; }
+label { display: block; margin-top: 15px; font-weight: bold; }
+input, select { width: 100%; padding: 8px; margin-top: 5px; }
+button { width: 100%; margin-top: 20px; padding: 10px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer; }
+.risk-high { background: #ffe0e0; border-left: 5px solid red; padding: 10px; }
+.risk-medium { background: #fff0d0; border-left: 5px solid orange; padding: 10px; }
+.risk-low { background: #e0ffe0; border-left: 5px solid green; padding: 10px; }
+.recommendation { background: #f9f9f9; padding: 10px; margin: 10px 0; border-radius: 5px; }

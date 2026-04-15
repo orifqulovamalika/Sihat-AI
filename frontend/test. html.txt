@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head><title>SHATAI Test</title></head>
+<body>
+    <h1>SHATAI API Test</h1>
+    <button onclick="test()">Test API</button>
+    <pre id="result"></pre>
+    <script>
+        async function test() {
+            const r = document.getElementById('result');
+            r.innerText = 'Yuklanmoqda...';
+            try {
+                const res = await fetch('http://127.0.0.1:8000/api/health-check');
+                const data = await res.json();
+                r.innerText = JSON.stringify(data, null, 2);
+            } catch(e) {
+                r.innerText = 'Xato: ' + e.message;
+            }
+        }
+    </script>
+</body>
+</html>

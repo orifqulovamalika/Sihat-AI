@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>SHATAI - Sog'liqni baholash</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🏥 SHATAI Health Platform</h1>
+        <p>Sun'iy intellekt asosida sog'lig'ingizni baholang</p>
+
+        <form id="healthForm">
+            <label>Yosh:</label>
+            <input type="number" id="age" required>
+
+            <label>Jins:</label>
+            <select id="gender">
+                <option value="male">Erkak</option>
+                <option value="female">Ayol</option>
+            </select>
+
+            <label>Bo'y (sm):</label>
+            <input type="number" id="height" required>
+
+            <label>Vazn (kg):</label>
+            <input type="number" id="weight" required>
+
+            <label>Qon bosimi:</label>
+            <input type="text" id="bloodPressure" placeholder="120/80">
+
+            <label>
+                <input type="checkbox" id="smoking"> Chekaman
+            </label>
+
+            <label>
+                <input type="checkbox" id="familyHistory"> Oilada kasallik bor
+            </label>
+
+            <button type="submit">BAHOLASH</button>
+        </form>
+
+        <div id="result" style="display:none; margin-top:20px; padding:15px; background:#f0f0f0;">
+            <h2>📊 Natija</h2>
+            <div id="resultText"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+document.getElementById('healthForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const data = {
+        age: parseInt(document.getElementById('age').value),
+        gender: document.getElementById('gender').value,
+        height_cm: parseFloat(document.getElementById('height').value),
+        weight_kg: parseFloat(document.getElementById('weight').value),
+        blood_pressure: document.getElementById('bloodPressure').value || null,
+        smoking: document.getElementById('smoking').checked,
+        family_history: document.getElementById('familyHistory').checked
+    };
+    const resultDiv = document.getElementById('result');
+    const resultText = document.getElementById('resultText');
+    resultDiv.style.display = 'block';
+    resultText.innerHTML = '⏳ Tahlil qilinmoqda...';
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/assess-risk', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+            const d = result.data;
+            const risk = d.risk_assessment;
+            const user = d.user_info;
+            let riskClass = risk.risk_level === 'YUQORI' ? 'risk-high' : (risk.risk_level === "O'RTA" ? 'risk-medium' : 'risk-low');
+            let html = `<div class="${riskClass}"><h3>Xavf darajasi: ${risk.risk_level}</h3><p>Xavf ball: ${risk.risk_score}/100</p></div>`;
+            html += `<h3>Sizning ma'lumotlaringiz</h3><p>Yosh: ${user.age}</p><p>Jins: ${user.gender === 'male' ? 'Erkak' : 'Ayol'}</p><p>BMI: ${user.bmi} (${user.bmi_category})</p>`;
+            html += `<h3>Tavsiyalar</h3>`;
+            d.recommendations.forEach(rec => {
+                html += `<div class="recommendation"><strong>${rec.text}</strong><br><small>Muddat: ${rec.deadline}</small></div>`;
+            });
+            resultText.innerHTML = html;
+        } else {
+            resultText.innerHTML = '<div class="risk-high">Xatolik yuz berdi</div>';
+        }
+    } catch (error) {
+        resultText.innerHTML = `<div class="risk-high">Serverga ulanishda xatolik: ${error.message}<br>Backend ishlayotganligini tekshiring.</div>`;
+    }
+});
