@@ -1,8 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
+from backend.app.ml.risk_model import HealthRiskModel
 
 router = APIRouter(prefix="/api", tags=["Health Assessment"])
+model = HealthRiskModel()
 
 class HealthData(BaseModel):
     age: int
@@ -20,24 +22,55 @@ class HealthData(BaseModel):
 @router.post("/assess-risk")
 async def assess_risk(data: HealthData):
     try:
-        # Oddiy test javobi
+        bmi = model.calculate_bmi(data.weight_kg, data.height_cm)
+        bmi_category = model.get_bmi_category(bmi)
+        
+        result = model.predict_risk(
+            age=data.age,
+            bmi=bmi,
+            blood_pressure=data.blood_pressure,
+            smoking=data.smoking,
+            family_history=data.family_history,
+            sleep_quality=data.sleep_quality,
+            mood=data.mood,
+            alcohol=data.alcohol,
+            joint_pain=data.joint_pain
+        )
+        
+        # Tavsiyalarni formatlash
+        recommendations_list = []
+        for rec in result["recommendations"]:
+            if "❗" in rec:
+                priority = "yuqori"
+                deadline = "1 hafta ichida"
+            elif "⚠️" in rec:
+                priority = "o'rta"
+                deadline = "3 oy ichida"
+            else:
+                priority = "past"
+                deadline = "yiliga 1 marta"
+            
+            recommendations_list.append({
+                "priority": priority,
+                "text": rec,
+                "deadline": deadline
+            })
+        
         return {
             "success": True,
             "data": {
                 "user_info": {
                     "age": data.age,
                     "gender": data.gender,
-                    "bmi": 25.0,
-                    "bmi_category": "Normal vazn"
+                    "bmi": bmi,
+                    "bmi_category": bmi_category
                 },
                 "risk_assessment": {
-                    "risk_level": "PAST",
-                    "risk_score": 20,
+                    "risk_level": result["risk_level"],
+                    "risk_score": result["risk_score"],
                     "max_score": 100
                 },
-                "recommendations": [
-                    {"priority": "past", "text": "Test ishlayapti", "deadline": "yiliga 1 marta"}
-                ]
+                "recommendations": recommendations_list
             }
         }
     except Exception as e:
@@ -45,4 +78,4 @@ async def assess_risk(data: HealthData):
 
 @router.get("/health-check")
 async def health_check():
-    return {"status": "ok", "message": "API ishlayapti"}
+    return {"status": "ok", "message": "AI Model ishlayapti"}
