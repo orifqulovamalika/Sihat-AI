@@ -57,7 +57,35 @@
                     <label id="bpLabel">Qon bosimi</label>
                     <input type="text" id="bloodPressure" placeholder="120/80" value="140/90">
                 </div>
+	
+<div class="form-group">
+    <label id="sleepLabel">🌙 Uyqu sifati (1-10)</label>
+    <input type="number" id="sleepQuality" min="1" max="10" value="7" required>
+</div>
 
+<div class="form-group">
+    <label id="moodLabel">😔 Kayfiyat (1-10)</label>
+    <input type="number" id="mood" min="1" max="10" value="7" required>
+</div>
+
+<div class="form-group">
+    <label id="alcoholLabel">🍺 Spirtli ichimlik (haftada)</label>
+    <select id="alcohol">
+        <option value="0">Yo'q</option>
+        <option value="1">1-2 marta</option>
+        <option value="2">3-5 marta</option>
+        <option value="3">Har kuni</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label id="jointLabel">🦴 Bo'g'im og'rig'i</label>
+    <select id="jointPain">
+        <option value="0">Yo'q</option>
+        <option value="1">Ba'zida</option>
+        <option value="2">Doimiy</option>
+    </select>
+</div>
                 <div class="checkbox-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="smoking"> <span id="smokingLabel">Chekaman</span>
