@@ -38,23 +38,35 @@ async def assess_risk(data: HealthData):
         )
         
         # Tavsiyalarni formatlash
+                # Tavsiyalarni formatlash
         recommendations_list = []
         for rec in result["recommendations"]:
-            if "❗" in rec:
+            # Deadlineni matn asosida aniqlash
+            if "❗" in rec or "Kardiolog" in rec or "shifokorga" in rec:
                 priority = "yuqori"
                 deadline = "1 hafta ichida"
-            elif "⚠️" in rec:
+            elif "⚠️" in rec or "qon bosimini" in rec or "tekshiruv" in rec:
                 priority = "o'rta"
-                deadline = "3 oy ichida"
+                deadline = "1 oy ichida"
+            elif "😴" in rec or "uyqu" in rec:
+                priority = "o'rta"
+                deadline = "2 hafta ichida"
+            elif "😔" in rec or "psixolog" in rec or "stress" in rec:
+                priority = "o'rta"
+                deadline = "1 oy ichida"
+            elif "⚖️" in rec or "vazn" in rec:
+                priority = "yuqori"
+                deadline = "darhol"
             else:
                 priority = "past"
-                deadline = "yiliga 1 marta"
+                deadline = "3 oy ichida"
             
             recommendations_list.append({
                 "priority": priority,
                 "text": rec,
                 "deadline": deadline
             })
+
         
         return {
             "success": True,
