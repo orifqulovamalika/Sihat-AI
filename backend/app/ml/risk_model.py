@@ -22,9 +22,9 @@ class HealthRiskModel:
             return "3-darajali semizlik"
 
     def predict_risk(self, age, bmi, blood_pressure=None, smoking=False, 
-                     family_history=False, sleep_quality=7, mood=7, 
-                     alcohol=0, joint_pain=0):
-        
+                 family_history=False, sleep_quality=7, mood=7, 
+                 alcohol=0, joint_pain=0):
+
         recommendations = []
         risk_score = 0
 

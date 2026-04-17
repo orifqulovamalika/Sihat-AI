@@ -199,14 +199,18 @@ document.getElementById('healthForm').addEventListener('submit', async function(
     e.preventDefault();
     
     const data = {
-        age: parseInt(document.getElementById('age').value),
-        gender: document.getElementById('gender').value,
-        height_cm: parseFloat(document.getElementById('height').value),
-        weight_kg: parseFloat(document.getElementById('weight').value),
-        blood_pressure: document.getElementById('bloodPressure').value || null,
-        smoking: document.getElementById('smoking').checked,
-        family_history: document.getElementById('familyHistory').checked
-    };
+    age: parseInt(document.getElementById('age').value),
+    gender: document.getElementById('gender').value,
+    height_cm: parseFloat(document.getElementById('height').value),
+    weight_kg: parseFloat(document.getElementById('weight').value),
+    blood_pressure: document.getElementById('bloodPressure').value || null,
+    smoking: document.getElementById('smoking').checked,
+    family_history: document.getElementById('familyHistory').checked,
+    sleep_quality: parseInt(document.getElementById('sleepQuality').value),
+    mood: parseInt(document.getElementById('mood').value),
+    alcohol: parseInt(document.getElementById('alcohol').value),
+    joint_pain: parseInt(document.getElementById('jointPain').value)
+};
     
     const resultDiv = document.getElementById('result');
     const resultContent = document.getElementById('resultContent');
