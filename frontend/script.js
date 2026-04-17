@@ -1,5 +1,7 @@
 // ========== API MANZILI (Render uchun) ==========
 const API_URL = 'https://sihat-ai-eq7c.onrender.com/api/assess-risk';
+const CLINICS_URL = 'https://sihat-ai-eq7c.onrender.com/api/clinics';
+
 // ========== TIL MA'LUMOTLARI ==========
 const texts = {
     uz: {
@@ -24,7 +26,17 @@ const texts = {
         recommendations: "Tavsiyalar",
         deadline: "Muddat",
         loading: "⏳ Tahlil qilinmoqda...",
-        error: "Serverga ulanishda xatolik! Backend ishlayotganligini tekshiring."
+        error: "Serverga ulanishda xatolik!",
+        sleep: "🌙 Uyqu sifati (1-10)",
+        mood: "😔 Kayfiyat (1-10)",
+        alcohol: "🍺 Spirtli ichimlik (haftada)",
+        joint: "🦴 Bo'g'im og'rig'i",
+        locationTitle: "📍 Atrofingizdagi klinikalar",
+        specialtyLabel: "🏥 Kasallik turi:",
+        findClinics: "🔍 Klinikalarni topish",
+        cardiology: "Yurak kasalliklari (Kardiologiya)",
+        endocrinology: "Diabet va endokrin kasalliklar",
+        neurology: "Nevrologiya (asab tizimi)"
     },
     en: {
         tagline: "Assess your health with artificial intelligence",
@@ -48,7 +60,17 @@ const texts = {
         recommendations: "Recommendations",
         deadline: "Deadline",
         loading: "⏳ Analyzing...",
-        error: "Connection error! Please check if backend is running."
+        error: "Connection error!",
+        sleep: "🌙 Sleep quality (1-10)",
+        mood: "😔 Mood (1-10)",
+        alcohol: "🍺 Alcohol (per week)",
+        joint: "🦴 Joint pain",
+        locationTitle: "📍 Nearby clinics",
+        specialtyLabel: "🏥 Specialty:",
+        findClinics: "🔍 Find clinics",
+        cardiology: "Cardiology",
+        endocrinology: "Endocrinology",
+        neurology: "Neurology"
     },
     ru: {
         tagline: "Оцените свое здоровье с помощью ИИ",
@@ -72,11 +94,22 @@ const texts = {
         recommendations: "Рекомендации",
         deadline: "Срок",
         loading: "⏳ Анализ...",
-        error: "Ошибка подключения! Проверьте работу бэкенда."
+        error: "Ошибка подключения!",
+        sleep: "🌙 Качество сна (1-10)",
+        mood: "😔 Настроение (1-10)",
+        alcohol: "🍺 Алкоголь (в неделю)",
+        joint: "🦴 Боль в суставах",
+        locationTitle: "📍 Клиники рядом",
+        specialtyLabel: "🏥 Специальность:",
+        findClinics: "🔍 Найти клиники",
+        cardiology: "Кардиология",
+        endocrinology: "Эндокринология",
+        neurology: "Неврология"
     }
 };
 
 let currentLang = 'uz';
+let selectedRegion = localStorage.getItem('selectedRegion') || 'Toshkent shahri';
 
 // ========== TILNI O'ZGARTIRISH ==========
 function changeLanguage(lang) {
@@ -99,6 +132,22 @@ function changeLanguage(lang) {
     document.getElementById('saveHistoryLabel').innerText = t.saveHistory;
     document.getElementById('darkModeLabel').innerText = t.darkMode;
     document.getElementById('saveSettingsBtn').innerText = t.saveBtn;
+    document.getElementById('sleepLabel').innerText = t.sleep;
+    document.getElementById('moodLabel').innerText = t.mood;
+    document.getElementById('alcoholLabel').innerText = t.alcohol;
+    document.getElementById('jointLabel').innerText = t.joint;
+    document.getElementById('locationTitle').innerHTML = t.locationTitle;
+    document.getElementById('specialtyLabel').innerText = t.specialtyLabel;
+    
+    const specialtySelect = document.getElementById('specialtySelect');
+    if (specialtySelect) {
+        specialtySelect.options[0].text = t.cardiology;
+        specialtySelect.options[1].text = t.endocrinology;
+        specialtySelect.options[2].text = t.neurology;
+    }
+    
+    const findBtn = document.querySelector('.clinic-btn');
+    if (findBtn) findBtn.innerHTML = t.findClinics;
     
     localStorage.setItem('language', lang);
 }
@@ -125,8 +174,11 @@ function loadSettings() {
     const saveHistory = localStorage.getItem('saveHistory') === 'true';
     const darkMode = localStorage.getItem('darkMode') === 'true';
     
-    document.getElementById('saveHistory').checked = saveHistory;
-    document.getElementById('darkMode').checked = darkMode;
+    const saveHistoryCheckbox = document.getElementById('saveHistory');
+    const darkModeCheckbox = document.getElementById('darkMode');
+    
+    if (saveHistoryCheckbox) saveHistoryCheckbox.checked = saveHistory;
+    if (darkModeCheckbox) darkModeCheckbox.checked = darkMode;
     
     if (darkMode) {
         document.body.classList.add('dark-mode');
@@ -140,7 +192,76 @@ function loadSettings() {
     }
 }
 
-// ========== NATIJANI CHIROYLI KO'RSATISH ==========
+// ========== VILOYAT MENYUSI ==========
+function toggleMenu() {
+    const menu = document.getElementById('regionMenu');
+    if (menu) {
+        if (menu.style.display === 'none' || !menu.style.display) {
+            menu.style.display = 'block';
+        } else {
+            menu.style.display = 'none';
+        }
+    }
+}
+
+function selectRegion(region) {
+    selectedRegion = region;
+    localStorage.setItem('selectedRegion', region);
+    toggleMenu();
+    showSelectedRegion();
+}
+
+function showSelectedRegion() {
+    const oldBadge = document.querySelector('.selected-region-badge');
+    if (oldBadge) oldBadge.remove();
+    
+    const header = document.querySelector('.header');
+    if (header) {
+        const badge = document.createElement('div');
+        badge.className = 'selected-region-badge';
+        badge.innerHTML = `📍 ${selectedRegion} <span style="font-size:10px;">▼</span>`;
+        badge.onclick = toggleMenu;
+        header.appendChild(badge);
+    }
+}
+
+// ========== KLINIKALARNI QIDIRISH ==========
+async function findClinics() {
+    const specialty = document.getElementById('specialtySelect').value;
+    const resultsDiv = document.getElementById('clinicResults');
+    
+    if (!resultsDiv) return;
+    
+    resultsDiv.style.display = 'block';
+    resultsDiv.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><span>⏳ Klinikalar qidirilmoqda...</span></div>';
+    
+    try {
+        const response = await fetch(`${CLINICS_URL}?specialty=${specialty}&region=${encodeURIComponent(selectedRegion)}`);
+        const result = await response.json();
+        
+        if (result.success && result.data && result.data.length > 0) {
+            let html = '<div class="clinic-list"><h4>🏥 Tavsiya etilgan klinikalar:</h4>';
+            result.data.forEach(clinic => {
+                html += `
+                    <div class="clinic-item">
+                        <strong>${clinic.name}</strong><br>
+                        📍 ${clinic.address}<br>
+                        📞 ${clinic.phone || "Telefon ma'lumoti mavjud emas"}<br>
+                        🏛️ ${clinic.type === 'davlat' ? 'Davlat muassasasi' : 'Xususiy klinika'}
+                    </div>
+                `;
+            });
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        } else {
+            resultsDiv.innerHTML = `<div class="clinic-not-found">❌ ${result.message || "Ushbu viloyat va ixtisoslik bo‘yicha klinika topilmadi."}</div>`;
+        }
+    } catch (error) {
+        resultsDiv.innerHTML = `<div class="clinic-not-found">❌ Klinikalarni yuklashda xatolik: ${error.message}</div>`;
+    }
+}
+
+// ========== NATIJANI KO'RSATISH ==========
 function displayResult(data, container) {
     const risk = data.risk_assessment;
     const user = data.user_info;
@@ -178,18 +299,22 @@ function displayResult(data, container) {
         <div><strong>💡 ${t.recommendations}</strong></div>
     `;
     
-    recs.forEach(rec => {
-        let priorityEmoji = rec.priority === 'yuqori' ? '❗' : (rec.priority === "o'rta" ? '⚠️' : '✅');
-        html += `
-            <div class="recommendation">
-                <span>${priorityEmoji}</span>
-                <div>
-                    <strong>${rec.text}</strong><br>
-                    <small>📅 ${t.deadline}: ${rec.deadline}</small>
+    if (recs && recs.length > 0) {
+        recs.forEach(rec => {
+            let priorityEmoji = rec.priority === 'yuqori' ? '❗' : (rec.priority === "o'rta" ? '⚠️' : '✅');
+            html += `
+                <div class="recommendation">
+                    <span>${priorityEmoji}</span>
+                    <div>
+                        <strong>${rec.text}</strong><br>
+                        <small>📅 ${t.deadline}: ${rec.deadline}</small>
+                    </div>
                 </div>
-            </div>
-        `;
-    });
+            `;
+        });
+    } else {
+        html += `<div class="recommendation">✅ Hech qanday tavsiya yo'q</div>`;
+    }
     
     container.innerHTML = html;
 }
@@ -199,18 +324,18 @@ document.getElementById('healthForm').addEventListener('submit', async function(
     e.preventDefault();
     
     const data = {
-    age: parseInt(document.getElementById('age').value),
-    gender: document.getElementById('gender').value,
-    height_cm: parseFloat(document.getElementById('height').value),
-    weight_kg: parseFloat(document.getElementById('weight').value),
-    blood_pressure: document.getElementById('bloodPressure').value || null,
-    smoking: document.getElementById('smoking').checked,
-    family_history: document.getElementById('familyHistory').checked,
-    sleep_quality: parseInt(document.getElementById('sleepQuality').value),
-    mood: parseInt(document.getElementById('mood').value),
-    alcohol: parseInt(document.getElementById('alcohol').value),
-    joint_pain: parseInt(document.getElementById('jointPain').value)
-};
+        age: parseInt(document.getElementById('age').value),
+        gender: document.getElementById('gender').value,
+        height_cm: parseFloat(document.getElementById('height').value),
+        weight_kg: parseFloat(document.getElementById('weight').value),
+        blood_pressure: document.getElementById('bloodPressure').value || null,
+        smoking: document.getElementById('smoking').checked,
+        family_history: document.getElementById('familyHistory').checked,
+        sleep_quality: parseInt(document.getElementById('sleepQuality').value),
+        mood: parseInt(document.getElementById('mood').value),
+        alcohol: parseInt(document.getElementById('alcohol').value),
+        joint_pain: parseInt(document.getElementById('jointPain').value)
+    };
     
     const resultDiv = document.getElementById('result');
     const resultContent = document.getElementById('resultContent');
@@ -253,4 +378,18 @@ document.getElementById('healthForm').addEventListener('submit', async function(
 });
 
 // ========== SAHIFA YUKLANGANDA ==========
-loadSettings();
+document.addEventListener('DOMContentLoaded', function() {
+    loadSettings();
+    showSelectedRegion();
+    
+    // Menyuni tashqariga bosganda yopish
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('regionMenu');
+        const menuIcon = document.querySelector('.menu-icon');
+        if (menu && menu.style.display === 'block') {
+            if (menuIcon && !menu.contains(event.target) && !menuIcon.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        }
+    });
+});
