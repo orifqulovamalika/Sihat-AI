@@ -113,36 +113,6 @@ function showSelectedRegion() {
     }
 }
 
-// ========== SOZLAMALAR MENYUSI ==========
-function toggleSettingsMenu() {
-    const menu = document.getElementById('settingsMenu');
-    if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-}
-
-function toggleDarkMode() {
-    const toggle = document.getElementById('darkModeToggle');
-    if (toggle) {
-        if (toggle.checked) document.body.classList.add('dark-mode');
-        else document.body.classList.remove('dark-mode');
-        localStorage.setItem('darkMode', toggle.checked);
-    }
-}
-
-function toggleSaveHistory() {
-    const toggle = document.getElementById('saveHistoryToggle');
-    if (toggle) localStorage.setItem('saveHistory', toggle.checked);
-}
-
-function loadSettingsFromMenu() {
-    const darkMode = localStorage.getItem('darkMode') === 'true';
-    const saveHistory = localStorage.getItem('saveHistory') === 'true';
-    const darkToggle = document.getElementById('darkModeToggle');
-    const saveToggle = document.getElementById('saveHistoryToggle');
-    if (darkToggle) darkToggle.checked = darkMode;
-    if (saveToggle) saveToggle.checked = saveHistory;
-    if (darkMode) document.body.classList.add('dark-mode');
-}
-
 // ========== KLINIKALARNI QIDIRISH ==========
 async function findClinics() {
     const specialty = document.getElementById('specialtySelect').value;
@@ -214,13 +184,6 @@ document.getElementById('healthForm').addEventListener('submit', async function(
         const result = await response.json();
         if (result.success) {
             displayResult(result.data, resultContent);
-            const saveToggle = document.getElementById('saveHistoryToggle');
-            if (saveToggle && saveToggle.checked) {
-                let history = JSON.parse(localStorage.getItem('healthHistory') || '[]');
-                history.unshift({ date: new Date().toLocaleString(), data: data, result: result.data });
-                if (history.length > 10) history.pop();
-                localStorage.setItem('healthHistory', JSON.stringify(history));
-            }
         } else {
             resultContent.innerHTML = `<div class="risk-high">❌ Xatolik: ${result.detail || "Noma'lum xato"}</div>`;
         }
@@ -234,18 +197,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const savedLang = localStorage.getItem('language');
     if (savedLang && texts[savedLang]) changeLanguage(savedLang);
     else changeLanguage('uz');
-    loadSettingsFromMenu();
     showSelectedRegion();
     document.addEventListener('click', function(event) {
         const regionMenu = document.getElementById('regionMenu');
-        const settingsMenu = document.getElementById('settingsMenu');
         const menuIcon = document.querySelector('.menu-icon');
-        const settingsIcon = document.querySelector('.settings-icon');
         if (regionMenu && regionMenu.style.display === 'block') {
-            if (menuIcon && !regionMenu.contains(event.target) && !menuIcon.contains(event.target)) regionMenu.style.display = 'none';
-        }
-        if (settingsMenu && settingsMenu.style.display === 'block') {
-            if (settingsIcon && !settingsMenu.contains(event.target) && !settingsIcon.contains(event.target)) settingsMenu.style.display = 'none';
+            if (menuIcon && !regionMenu.contains(event.target) && !menuIcon.contains(event.target)) {
+                regionMenu.style.display = 'none';
+            }
         }
     });
 });

@@ -21,9 +21,6 @@
                     <div class="bar"></div>
                 </div>
 
-                <!-- Sozlamalar tugmasi (o'ng tomonda) -->
-                <div class="settings-icon" onclick="toggleSettingsMenu()">⚙️</div>
-
                 <!-- Viloyatlar menyusi -->
                 <div id="regionMenu" class="region-menu" style="display: none;">
                     <div class="region-list">
@@ -42,35 +39,6 @@
                         <button onclick="selectRegion('Toshkent')">Toshkent viloyati</button>
                         <button onclick="selectRegion('Farg‘ona')">Farg‘ona viloyati</button>
                         <button onclick="selectRegion('Xorazm')">Xorazm viloyati</button>
-                    </div>
-                </div>
-
-                <!-- Sozlamalar menyusi -->
-                <div id="settingsMenu" class="settings-menu" style="display: none;">
-                    <div class="settings-list">
-                        <h4>⚙️ Sozlamalar</h4>
-                        <div class="settings-item">
-                            <label>🌐 Til:</label>
-                            <div class="lang-buttons">
-                                <button type="button" onclick="changeLanguage('uz')">🇺🇿 O'zbek</button>
-                                <button type="button" onclick="changeLanguage('en')">🇬🇧 English</button>
-                                <button type="button" onclick="changeLanguage('ru')">🇷🇺 Русский</button>
-                            </div>
-                        </div>
-                        <div class="settings-item">
-                            <label>🌙 Qorong'u rejim:</label>
-                            <label class="switch">
-                                <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="settings-item">
-                            <label>💾 Ma'lumotlarni saqlash:</label>
-                            <label class="switch">
-                                <input type="checkbox" id="saveHistoryToggle" onchange="toggleSaveHistory()">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
                     </div>
                 </div>
 
