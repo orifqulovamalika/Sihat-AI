@@ -28,116 +28,109 @@ class HealthRiskModel:
         recommendations = []
         risk_score = 0
 
-        # ========== YURAK XAVFI ==========
+        # ========== 1. YURAK-QON TOMIR XAVFI ==========
         heart_risk = 0
         if age > 50:
             heart_risk += 25
+            recommendations.append("❗ 50 yoshdan oshganingizda yurak xavfi ortadi. Kardiologga murojaat qiling.")
         if bmi > 30:
             heart_risk += 25
+            recommendations.append("❗ Ortiqcha vazn yurakka yuk beradi. Vaznni kamaytirish tavsiya etiladi.")
         if smoking:
             heart_risk += 20
+            recommendations.append("❗ Chekish yurak-qon tomir kasalliklari xavfini oshiradi. Chekishni tashlash tavsiya etiladi.")
         if family_history:
             heart_risk += 15
+            recommendations.append("❗ Oilada yurak kasalliklari bo'lganlar muntazam tekshiruvdan o'tishi kerak.")
         if blood_pressure:
             try:
                 systolic = int(blood_pressure.split('/')[0])
                 if systolic > 140:
                     heart_risk += 20
+                    recommendations.append("⚠️ Qon bosimingiz yuqori (140/90 dan yuqori). Har kuni o'lchab boring va shifokorga murojaat qiling.")
+                elif systolic > 130:
+                    heart_risk += 10
+                    recommendations.append("⚠️ Qon bosimingiz me'yordan biroz yuqori. Tuzni kamaytiring va muntazam tekshirib turing.")
             except:
                 pass
-        if sleep_quality < 5:
+        if sleep_quality < 6:
             heart_risk += 10
+            recommendations.append("😴 Yomon uyqu yurak xavfini oshiradi. Kuniga 7-8 soat uxlashga harakat qiling.")
         
         if heart_risk > 50:
-            recommendations.append("❗ Yurak xavfi yuqori. Kardiologga murojaat qiling.")
             risk_score += heart_risk
 
-        # ========== QANDLI DIABET ==========
+        # ========== 2. QANDLI DIABET XAVFI ==========
         diabetes_risk = 0
         if age > 45:
             diabetes_risk += 20
+            recommendations.append("❗ 45 yoshdan oshganingizda qandli diabet xavfi ortadi. Qon glyukozasini tekshiring.")
         if bmi > 30:
             diabetes_risk += 30
+            recommendations.append("❗ Ortiqcha vazn diabet xavfini oshiradi. Parhez va jismoniy faollik tavsiya etiladi.")
         if family_history:
             diabetes_risk += 20
+            recommendations.append("❗ Oilada diabet bo'lganlar muntazam tekshiruvdan o'tishi kerak.")
         if smoking:
+            diabetes_risk += 10
+        if sleep_quality < 6:
             diabetes_risk += 10
         
         if diabetes_risk > 50:
-            recommendations.append("❗ Qandli diabet tekshiruvidan o'ting (glyukozalanmagan gemoglobin).")
+            recommendations.append("⚠️ Qandli diabet xavfi yuqori. Glyukozalanmagan gemoglobin (HbA1c) tekshiruvidan o'ting.")
             risk_score += diabetes_risk
 
-        # ========== GIPERTONIYA ==========
-        hypertension_risk = 0
-        if age > 40:
-            hypertension_risk += 15
-        if bmi > 27:
-            hypertension_risk += 25
-        if smoking:
-            hypertension_risk += 15
-        if family_history:
-            hypertension_risk += 15
-        if blood_pressure:
-            try:
-                systolic = int(blood_pressure.split('/')[0])
-                if systolic > 130:
-                    hypertension_risk += 25
-            except:
-                pass
-        
-        if hypertension_risk > 50:
-            recommendations.append("⚠️ Qon bosimini har kuni ertalab va kechqurun o'lchab turing.")
-            risk_score += hypertension_risk
-
-        # ========== DEPRESSIYA ==========
+        # ========== 3. DEPRESSIYA XAVFI ==========
         depression_risk = 0
-        if mood < 4:
-            depression_risk += 40
-        if sleep_quality < 4:
+        if mood < 5:
             depression_risk += 30
+            recommendations.append("😔 Kayfiyatingiz past. Psixolog bilan suhbatlashish foydali bo'lishi mumkin.")
+        if sleep_quality < 5:
+            depression_risk += 30
+            recommendations.append("😴 Uyqu sifatingiz yomon. Bu kayfiyatga ta'sir qilishi mumkin.")
         if age > 60:
             depression_risk += 15
         
         if depression_risk > 50:
-            recommendations.append("😔 Psixolog yoki psixiatrga murojaat qiling. Stressni boshqarish va meditatsiya tavsiya etiladi.")
+            recommendations.append("🧘‍♀️ Stressni boshqarish usullarini o'rganing. Yoga yoki meditatsiya qilib ko'ring.")
             risk_score += depression_risk
 
-        # ========== JIGAR KASALLIGI ==========
-        liver_risk = 0
+        # ========== 4. JIGAR KASALLIGI ==========
         if alcohol >= 2:
-            liver_risk += 35
-        if bmi > 30:
-            liver_risk += 30
-        
-        if liver_risk > 50:
-            recommendations.append("🍺 Jigar fermentlarini tekshiring (ALT, AST). Spirtli ichimliklarni kamaytiring.")
+            liver_risk = 35
             risk_score += liver_risk
+            recommendations.append("🍺 Spirtli ichimliklarni ko'p iste'mol qilish jigar kasalliklariga olib kelishi mumkin. Kamaytirish tavsiya etiladi.")
+        elif alcohol >= 1:
+            recommendations.append("🍷 Spirtli ichimliklarni me'yorida iste'mol qiling. Haftada 1-2 martadan oshirmang.")
 
-        # ========== ARTRIT ==========
-        arthritis_risk = 0
-        if age > 50:
-            arthritis_risk += 25
-        if bmi > 30:
-            arthritis_risk += 30
-        if joint_pain > 0:
-            arthritis_risk += 25
-        
-        if arthritis_risk > 50:
-            recommendations.append("🦵 Revmatologga murojaat qiling. Yengil mashqlar va vazn kamaytirish tavsiya etiladi.")
+        # ========== 5. ARTRIT (BO'G'IM) ==========
+        if joint_pain >= 1:
+            arthritis_risk = 20 + (joint_pain * 10)
             risk_score += arthritis_risk
+            recommendations.append("🦵 Bo'g'im og'rig'ingiz bor. Revmatologga murojaat qiling va yengil mashqlar qiling.")
+            if bmi > 30:
+                recommendations.append("⚖️ Ortiqcha vazn bo'g'imlarga yuk beradi. Vazn kamaytirish tavsiya etiladi.")
 
-        # ========== UMUMIY TAVSIYALAR ==========
-        if risk_score < 50:
-            recommendations.append("✅ Sog'lig'ingiz yaxshi. Yillik profilaktik tekshiruvlarni davom ettiring.")
-        
+        # ========== 6. UMUMIY TAVSIYALAR ==========
         if bmi > 30:
-            recommendations.append("⚖️ Vazn kamaytirish bo'yicha parhez va jismoniy mashqlar (haftada 150 daqiqa).")
+            recommendations.append("⚖️ Vazn kamaytirish bo'yicha parhez va jismoniy mashqlar (haftada 150 daqiqa) tavsiya etiladi.")
+        elif bmi > 25:
+            recommendations.append("⚖️ Vazningiz me'yordan biroz yuqori. Parhez va mashqlar bilan vaznni kamaytirish foydali.")
         
         if sleep_quality < 6:
             recommendations.append("😴 Uyqu tartibingizni yaxshilang. Kuniga 7-8 soat uxlash tavsiya etiladi.")
         
         if mood < 5:
             recommendations.append("🧘‍♀️ Stressni boshqarish usullarini o'rganing. Yoga yoki meditatsiya qilib ko'ring.")
+        
+        if not smoking and alcohol == 0 and bmi < 30 and sleep_quality >= 6 and mood >= 6:
+            recommendations.append("✅ Sog'lig'ingiz yaxshi. Yillik profilaktik tekshiruvlarni davom ettiring.")
+        
+        # Takrorlanuvchi tavsiyalarni olib tashlash
+        unique_recommendations = []
+        for rec in recommendations:
+            if rec not in unique_recommendations:
+                unique_recommendations.append(rec)
 
         # Xavf darajasini aniqlash
         if risk_score >= 70:
@@ -147,14 +140,8 @@ class HealthRiskModel:
         else:
             overall_risk = "PAST"
 
-        # Takrorlanuvchi tavsiyalarni olib tashlash
-        unique_recommendations = []
-        for rec in recommendations:
-            if rec not in unique_recommendations:
-                unique_recommendations.append(rec)
-
         return {
             "risk_level": overall_risk,
             "risk_score": min(risk_score, 100),
-            "recommendations": unique_recommendations[:8]
+            "recommendations": unique_recommendations[:12]  # 12 tagacha tavsiya
         }

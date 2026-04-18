@@ -14,7 +14,7 @@
         <div class="health-card">
             <!-- HEADER QISMI -->
             <div class="header">
-                <!-- 3 ta nuqta menyu tugmasi (chap tomonda - VILOYATLAR) -->
+                <!-- 3 ta nuqta menyu tugmasi (chap tomonda) -->
                 <div class="menu-icon" onclick="toggleMenu()">
                     <div class="bar"></div>
                     <div class="bar"></div>
@@ -22,11 +22,9 @@
                 </div>
 
                 <!-- Sozlamalar tugmasi (o'ng tomonda) -->
-                <div class="settings-icon" onclick="toggleSettingsMenu()">
-                    ⚙️
-                </div>
+                <div class="settings-icon" onclick="toggleSettingsMenu()">⚙️</div>
 
-                <!-- Viloyatlar menyusi (chapda) -->
+                <!-- Viloyatlar menyusi -->
                 <div id="regionMenu" class="region-menu" style="display: none;">
                     <div class="region-list">
                         <h4>📍 Viloyatingizni tanlang</h4>
@@ -47,16 +45,16 @@
                     </div>
                 </div>
 
-                <!-- Sozlamalar menyusi (o'ngda) -->
+                <!-- Sozlamalar menyusi -->
                 <div id="settingsMenu" class="settings-menu" style="display: none;">
                     <div class="settings-list">
                         <h4>⚙️ Sozlamalar</h4>
                         <div class="settings-item">
                             <label>🌐 Til:</label>
                             <div class="lang-buttons">
-                                <button onclick="changeLanguage('uz')">🇺🇿 O'zbek</button>
-                                <button onclick="changeLanguage('en')">🇬🇧 English</button>
-                                <button onclick="changeLanguage('ru')">🇷🇺 Русский</button>
+                                <button type="button" onclick="changeLanguage('uz')">🇺🇿 O'zbek</button>
+                                <button type="button" onclick="changeLanguage('en')">🇬🇧 English</button>
+                                <button type="button" onclick="changeLanguage('ru')">🇷🇺 Русский</button>
                             </div>
                         </div>
                         <div class="settings-item">
