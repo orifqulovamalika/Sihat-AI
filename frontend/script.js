@@ -64,26 +64,25 @@ function changeLanguage(lang) {
     currentLang = lang;
     const t = texts[lang];
     
-    const elements = ['tagline', 'ageLabel', 'genderLabel', 'heightLabel', 'weightLabel', 'bpLabel',
-        'smokingLabel', 'familyLabel', 'submitBtn', 'resultTitle', 'settingsTitle', 'saveHistoryLabel',
-        'darkModeLabel', 'saveSettingsBtn', 'sleepLabel', 'moodLabel', 'alcoholLabel', 'jointLabel',
-        'locationTitle', 'specialtyLabel'];
-    
-    elements.forEach(id => {
-        const el = document.getElementById(id);
-        if (el && t[id]) {
-            if (id === 'submitBtn') el.innerHTML = t[id];
-            else if (id === 'resultTitle') el.innerText = t[id];
-            else if (id === 'settingsTitle') el.innerHTML = t[id];
-            else if (id === 'locationTitle') el.innerHTML = t[id];
-            else el.innerText = t[id];
-        }
-    });
-    
-    const maleOption = document.getElementById('maleOption');
-    const femaleOption = document.getElementById('femaleOption');
-    if (maleOption) maleOption.innerText = t.male;
-    if (femaleOption) femaleOption.innerText = t.female;
+    document.getElementById('tagline').innerText = t.tagline;
+    document.getElementById('ageLabel').innerText = t.age;
+    document.getElementById('genderLabel').innerText = t.gender;
+    document.getElementById('maleOption').innerText = t.male;
+    document.getElementById('femaleOption').innerText = t.female;
+    document.getElementById('heightLabel').innerText = t.height;
+    document.getElementById('weightLabel').innerText = t.weight;
+    document.getElementById('bpLabel').innerText = t.bp;
+    document.getElementById('smokingLabel').innerText = t.smoking;
+    document.getElementById('familyLabel').innerText = t.family;
+    document.getElementById('submitBtn').innerHTML = t.submit;
+    document.getElementById('resultTitle').innerText = t.result;
+    document.getElementById('settingsTitle').innerHTML = t.settings;
+    document.getElementById('sleepLabel').innerText = t.sleep;
+    document.getElementById('moodLabel').innerText = t.mood;
+    document.getElementById('alcoholLabel').innerText = t.alcohol;
+    document.getElementById('jointLabel').innerText = t.joint;
+    document.getElementById('locationTitle').innerHTML = t.locationTitle;
+    document.getElementById('specialtyLabel').innerText = t.specialtyLabel;
     
     const specialtySelect = document.getElementById('specialtySelect');
     if (specialtySelect) {
@@ -98,7 +97,7 @@ function changeLanguage(lang) {
     localStorage.setItem('language', lang);
 }
 
-// ========== SOZLAMALAR ==========
+// ========== SOZLAMALAR (ESKI VERSIYA) ==========
 function saveSettings() {
     const saveHistory = document.getElementById('saveHistory').checked;
     const darkMode = document.getElementById('darkMode').checked;
@@ -156,6 +155,46 @@ function showSelectedRegion() {
         badge.onclick = toggleMenu;
         header.appendChild(badge);
     }
+}
+
+// ========== SOZLAMALAR MENYUSI (YANGI) ==========
+function toggleSettingsMenu() {
+    const menu = document.getElementById('settingsMenu');
+    if (menu) {
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+function toggleDarkMode() {
+    const toggle = document.getElementById('darkModeToggle');
+    if (toggle) {
+        if (toggle.checked) {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+        localStorage.setItem('darkMode', toggle.checked);
+    }
+}
+
+function toggleSaveHistory() {
+    const toggle = document.getElementById('saveHistoryToggle');
+    if (toggle) {
+        localStorage.setItem('saveHistory', toggle.checked);
+    }
+}
+
+function loadSettingsFromMenu() {
+    const darkMode = localStorage.getItem('darkMode') === 'true';
+    const saveHistory = localStorage.getItem('saveHistory') === 'true';
+    
+    const darkToggle = document.getElementById('darkModeToggle');
+    const saveToggle = document.getElementById('saveHistoryToggle');
+    
+    if (darkToggle) darkToggle.checked = darkMode;
+    if (saveToggle) saveToggle.checked = saveHistory;
+    
+    if (darkMode) document.body.classList.add('dark-mode');
 }
 
 // ========== KLINIKALARNI QIDIRISH ==========
@@ -262,7 +301,8 @@ document.getElementById('healthForm').addEventListener('submit', async function(
         
         if (result.success) {
             displayResult(result.data, resultContent);
-            if (document.getElementById('saveHistory').checked) {
+            const saveHistoryCheckbox = document.getElementById('saveHistoryToggle') || document.getElementById('saveHistory');
+            if (saveHistoryCheckbox && saveHistoryCheckbox.checked) {
                 let history = JSON.parse(localStorage.getItem('healthHistory') || '[]');
                 history.unshift({ date: new Date().toLocaleString(), data: data, result: result.data });
                 if (history.length > 10) history.pop();
@@ -279,53 +319,6 @@ document.getElementById('healthForm').addEventListener('submit', async function(
 // ========== SAHIFA YUKLANGANDA ==========
 document.addEventListener('DOMContentLoaded', function() {
     loadSettings();
-    showSelectedRegion();
-    
-    document.addEventListener('click', function(event) {
-        const menu = document.getElementById('regionMenu');
-        const menuIcon = document.querySelector('.menu-icon');
-        if (menu && menu.style.display === 'block') {
-            if (menuIcon && !menu.contains(event.target) && !menuIcon.contains(event.target)) {
-                menu.style.display = 'none';
-            }
-        }
-    });
-});
-// ========== SOZLAMALAR MENYUSI ==========
-function toggleSettingsMenu() {
-    const menu = document.getElementById('settingsMenu');
-    if (menu) {
-        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-    }
-}
-
-function toggleDarkMode() {
-    const isDark = document.getElementById('darkModeToggle').checked;
-    if (isDark) {
-        document.body.classList.add('dark-mode');
-    } else {
-        document.body.classList.remove('dark-mode');
-    }
-    localStorage.setItem('darkMode', isDark);
-}
-
-function toggleSaveHistory() {
-    const isSave = document.getElementById('saveHistoryToggle').checked;
-    localStorage.setItem('saveHistory', isSave);
-}
-
-function loadSettingsFromMenu() {
-    const darkMode = localStorage.getItem('darkMode') === 'true';
-    const saveHistory = localStorage.getItem('saveHistory') === 'true';
-    
-    document.getElementById('darkModeToggle').checked = darkMode;
-    document.getElementById('saveHistoryToggle').checked = saveHistory;
-    
-    if (darkMode) document.body.classList.add('dark-mode');
-}
-
-// Sahifa yuklanganda sozlamalarni yuklash
-document.addEventListener('DOMContentLoaded', function() {
     loadSettingsFromMenu();
     showSelectedRegion();
     
