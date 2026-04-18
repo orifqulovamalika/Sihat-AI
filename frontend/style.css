@@ -288,3 +288,137 @@ body {
 body.dark-mode .health-card { background: rgba(30,30,40,0.95); color: #eee; }
 body.dark-mode .form-group input, body.dark-mode .form-group select { background: #2a2a2a; color: white; }
 body.dark-mode .settings-panel, body.dark-mode .location-finder { background: #2a2a2a; }
+/* Sozlamalar ikonkasi */
+.settings-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 100;
+    color: white;
+    background: rgba(255,255,255,0.2);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.settings-icon:hover {
+    background: rgba(255,255,255,0.4);
+    transform: rotate(15deg);
+}
+
+/* Sozlamalar menyusi */
+.settings-menu {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 101;
+    width: 260px;
+    padding: 15px;
+}
+
+.settings-list h4 {
+    margin: 0 0 15px 0;
+    color: #1E3A5F;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.settings-item {
+    margin-bottom: 15px;
+}
+
+.settings-item label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.lang-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.lang-buttons button {
+    background: #f0f0f0;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.lang-buttons button:hover {
+    background: #1E5A9B;
+    color: white;
+}
+
+/* Toggle switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #1E5A9B;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Tanlangan viloyat badge */
+.selected-region-badge {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    color: white;
+    cursor: pointer;
+}

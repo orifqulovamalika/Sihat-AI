@@ -14,14 +14,19 @@
         <div class="health-card">
             <!-- HEADER QISMI -->
             <div class="header">
-                <!-- 3 ta nuqta menyu tugmasi (chap tomonda) -->
+                <!-- 3 ta nuqta menyu tugmasi (chap tomonda - VILOYATLAR) -->
                 <div class="menu-icon" onclick="toggleMenu()">
                     <div class="bar"></div>
                     <div class="bar"></div>
                     <div class="bar"></div>
                 </div>
 
-                <!-- Viloyatlar menyusi -->
+                <!-- Sozlamalar tugmasi (o'ng tomonda) -->
+                <div class="settings-icon" onclick="toggleSettingsMenu()">
+                    ⚙️
+                </div>
+
+                <!-- Viloyatlar menyusi (chapda) -->
                 <div id="regionMenu" class="region-menu" style="display: none;">
                     <div class="region-list">
                         <h4>📍 Viloyatingizni tanlang</h4>
@@ -42,11 +47,33 @@
                     </div>
                 </div>
 
-                <!-- Til tanlash tugmalari (o'ng tomonda) -->
-                <div class="language-selector">
-                    <button type="button" class="lang-btn" onclick="changeLanguage('uz')">🇺🇿 O'zbek</button>
-                    <button type="button" class="lang-btn" onclick="changeLanguage('en')">🇬🇧 English</button>
-                    <button type="button" class="lang-btn" onclick="changeLanguage('ru')">🇷🇺 Русский</button>
+                <!-- Sozlamalar menyusi (o'ngda) -->
+                <div id="settingsMenu" class="settings-menu" style="display: none;">
+                    <div class="settings-list">
+                        <h4>⚙️ Sozlamalar</h4>
+                        <div class="settings-item">
+                            <label>🌐 Til:</label>
+                            <div class="lang-buttons">
+                                <button onclick="changeLanguage('uz')">🇺🇿 O'zbek</button>
+                                <button onclick="changeLanguage('en')">🇬🇧 English</button>
+                                <button onclick="changeLanguage('ru')">🇷🇺 Русский</button>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <label>🌙 Qorong'u rejim:</label>
+                            <label class="switch">
+                                <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <label>💾 Ma'lumotlarni saqlash:</label>
+                            <label class="switch">
+                                <input type="checkbox" id="saveHistoryToggle" onchange="toggleSaveHistory()">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="logo">
@@ -61,7 +88,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label id="ageLabel">Yosh</label>
-                        <input type="number" id="age" value="45" required>
+                        <input type="number" id="age" value="27" required>
                     </div>
                     <div class="form-group">
                         <label id="genderLabel">Jins</label>
@@ -75,27 +102,27 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label id="heightLabel">Bo'y (sm)</label>
-                        <input type="number" id="height" value="170" required>
+                        <input type="number" id="height" value="175" required>
                     </div>
                     <div class="form-group">
                         <label id="weightLabel">Vazn (kg)</label>
-                        <input type="number" id="weight" value="85" required>
+                        <input type="number" id="weight" value="87" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label id="bpLabel">Qon bosimi</label>
-                    <input type="text" id="bloodPressure" placeholder="120/80" value="140/90">
+                    <input type="text" id="bloodPressure" placeholder="120/80" value="120/80">
                 </div>
 
                 <div class="form-group">
                     <label id="sleepLabel">🌙 Uyqu sifati (1-10)</label>
-                    <input type="number" id="sleepQuality" min="1" max="10" value="7" required>
+                    <input type="number" id="sleepQuality" min="1" max="10" value="5" required>
                 </div>
 
                 <div class="form-group">
                     <label id="moodLabel">😔 Kayfiyat (1-10)</label>
-                    <input type="number" id="mood" min="1" max="10" value="7" required>
+                    <input type="number" id="mood" min="1" max="10" value="6" required>
                 </div>
 
                 <div class="form-group">
@@ -142,18 +169,6 @@
                 </div>
                 <button type="button" onclick="findClinics()" class="clinic-btn">🔍 Klinikalarni topish</button>
                 <div id="clinicResults" class="clinic-results" style="display: none;"></div>
-            </div>
-
-            <!-- SOZLAMALAR PANELI -->
-            <div class="settings-panel">
-                <h4 id="settingsTitle">⚙️ Sozlamalar</h4>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="saveHistory"> <span id="saveHistoryLabel">So'rovlar tarixini saqlash</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="darkMode"> <span id="darkModeLabel">Qorong'u rejim</span>
-                </label>
-                <button type="button" onclick="saveSettings()" class="settings-btn" id="saveSettingsBtn">Saqlash</button>
             </div>
 
             <!-- NATIJA BO'LIMI -->

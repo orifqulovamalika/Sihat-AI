@@ -291,3 +291,60 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+// ========== SOZLAMALAR MENYUSI ==========
+function toggleSettingsMenu() {
+    const menu = document.getElementById('settingsMenu');
+    if (menu) {
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+function toggleDarkMode() {
+    const isDark = document.getElementById('darkModeToggle').checked;
+    if (isDark) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+    localStorage.setItem('darkMode', isDark);
+}
+
+function toggleSaveHistory() {
+    const isSave = document.getElementById('saveHistoryToggle').checked;
+    localStorage.setItem('saveHistory', isSave);
+}
+
+function loadSettingsFromMenu() {
+    const darkMode = localStorage.getItem('darkMode') === 'true';
+    const saveHistory = localStorage.getItem('saveHistory') === 'true';
+    
+    document.getElementById('darkModeToggle').checked = darkMode;
+    document.getElementById('saveHistoryToggle').checked = saveHistory;
+    
+    if (darkMode) document.body.classList.add('dark-mode');
+}
+
+// Sahifa yuklanganda sozlamalarni yuklash
+document.addEventListener('DOMContentLoaded', function() {
+    loadSettingsFromMenu();
+    showSelectedRegion();
+    
+    // Menyuni tashqariga bosganda yopish
+    document.addEventListener('click', function(event) {
+        const regionMenu = document.getElementById('regionMenu');
+        const settingsMenu = document.getElementById('settingsMenu');
+        const menuIcon = document.querySelector('.menu-icon');
+        const settingsIcon = document.querySelector('.settings-icon');
+        
+        if (regionMenu && regionMenu.style.display === 'block') {
+            if (menuIcon && !regionMenu.contains(event.target) && !menuIcon.contains(event.target)) {
+                regionMenu.style.display = 'none';
+            }
+        }
+        if (settingsMenu && settingsMenu.style.display === 'block') {
+            if (settingsIcon && !settingsMenu.contains(event.target) && !settingsIcon.contains(event.target)) {
+                settingsMenu.style.display = 'none';
+            }
+        }
+    });
+});
