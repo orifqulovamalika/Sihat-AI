@@ -90,7 +90,13 @@ function changeLanguage(lang) {
 // ========== VILOYAT MENYUSI ==========
 function toggleMenu() {
     const menu = document.getElementById('regionMenu');
-    if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    if (menu) {
+        if (menu.style.display === 'none' || menu.style.display === '') {
+            menu.style.display = 'block';
+        } else {
+            menu.style.display = 'none';
+        }
+    }
 }
 
 function selectRegion(region) {
@@ -159,38 +165,40 @@ function displayResult(data, container) {
 }
 
 // ========== ASOSIY FORMA ==========
-document.getElementById('healthForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const data = {
-        age: parseInt(document.getElementById('age').value),
-        gender: document.getElementById('gender').value,
-        height_cm: parseFloat(document.getElementById('height').value),
-        weight_kg: parseFloat(document.getElementById('weight').value),
-        blood_pressure: document.getElementById('bloodPressure').value || null,
-        smoking: document.getElementById('smoking').checked,
-        family_history: document.getElementById('familyHistory').checked,
-        sleep_quality: parseInt(document.getElementById('sleepQuality').value),
-        mood: parseInt(document.getElementById('mood').value),
-        alcohol: parseInt(document.getElementById('alcohol').value),
-        joint_pain: parseInt(document.getElementById('jointPain').value)
-    };
-    const resultDiv = document.getElementById('result');
-    const resultContent = document.getElementById('resultContent');
-    resultDiv.style.display = 'block';
-    resultContent.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><span>${texts[currentLang].loading}</span></div>`;
-    try {
-        const response = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const result = await response.json();
-        if (result.success) {
-            displayResult(result.data, resultContent);
-        } else {
-            resultContent.innerHTML = `<div class="risk-high">❌ Xatolik: ${result.detail || "Noma'lum xato"}</div>`;
+if (document.getElementById('healthForm')) {
+    document.getElementById('healthForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const data = {
+            age: parseInt(document.getElementById('age').value),
+            gender: document.getElementById('gender').value,
+            height_cm: parseFloat(document.getElementById('height').value),
+            weight_kg: parseFloat(document.getElementById('weight').value),
+            blood_pressure: document.getElementById('bloodPressure').value || null,
+            smoking: document.getElementById('smoking').checked,
+            family_history: document.getElementById('familyHistory').checked,
+            sleep_quality: parseInt(document.getElementById('sleepQuality').value),
+            mood: parseInt(document.getElementById('mood').value),
+            alcohol: parseInt(document.getElementById('alcohol').value),
+            joint_pain: parseInt(document.getElementById('jointPain').value)
+        };
+        const resultDiv = document.getElementById('result');
+        const resultContent = document.getElementById('resultContent');
+        resultDiv.style.display = 'block';
+        resultContent.innerHTML = `<div class="loading-spinner"><div class="spinner"></div><span>${texts[currentLang].loading}</span></div>`;
+        try {
+            const response = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const result = await response.json();
+            if (result.success) {
+                displayResult(result.data, resultContent);
+            } else {
+                resultContent.innerHTML = `<div class="risk-high">❌ Xatolik: ${result.detail || "Noma'lum xato"}</div>`;
+            }
+        } catch (error) {
+            resultContent.innerHTML = `<div class="risk-high">❌ ${texts[currentLang].error}<br>${error.message}</div>`;
         }
-    } catch (error) {
-        resultContent.innerHTML = `<div class="risk-high">❌ ${texts[currentLang].error}<br>${error.message}</div>`;
-    }
-});
+    });
+}
 
 // ========== SAHIFA YUKLANGANDA ==========
 document.addEventListener('DOMContentLoaded', function() {
@@ -198,6 +206,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (savedLang && texts[savedLang]) changeLanguage(savedLang);
     else changeLanguage('uz');
     showSelectedRegion();
+    
+    // Menyuni tashqariga bosganda yopish
     document.addEventListener('click', function(event) {
         const regionMenu = document.getElementById('regionMenu');
         const menuIcon = document.querySelector('.menu-icon');
