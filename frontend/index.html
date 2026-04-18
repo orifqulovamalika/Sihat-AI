@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHATAI - Sog'liqni baholash</title>
+    <title>Sihat AI - Sog'liqni baholash</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -12,14 +12,43 @@
 <body>
     <div class="app-container">
         <div class="health-card">
+            <!-- HEADER QISMI -->
             <div class="header">
-                <!-- Til tanlash tugmalari -->
-                <div class="language-selector">
-                    <button type="button" class="lang-btn" onclick="changeLanguage('uz')">UZ O'zbek</button>
-                    <button type="button" class="lang-btn" onclick="changeLanguage('en')">EN English</button>
-                    <button type="button" class="lang-btn" onclick="changeLanguage('ru')">RU Русский</button>
+                <!-- 3 ta nuqta menyu tugmasi (chap tomonda) -->
+                <div class="menu-icon" onclick="toggleMenu()">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
                 </div>
-                
+
+                <!-- Viloyatlar menyusi -->
+                <div id="regionMenu" class="region-menu" style="display: none;">
+                    <div class="region-list">
+                        <h4>📍 Viloyatingizni tanlang</h4>
+                        <button onclick="selectRegion('Toshkent shahri')">Toshkent shahri</button>
+                        <button onclick="selectRegion('Qoraqalpog‘iston')">Qoraqalpog‘iston</button>
+                        <button onclick="selectRegion('Andijon')">Andijon viloyati</button>
+                        <button onclick="selectRegion('Buxoro')">Buxoro viloyati</button>
+                        <button onclick="selectRegion('Jizzax')">Jizzax viloyati</button>
+                        <button onclick="selectRegion('Qashqadaryo')">Qashqadaryo viloyati</button>
+                        <button onclick="selectRegion('Navoiy')">Navoiy viloyati</button>
+                        <button onclick="selectRegion('Namangan')">Namangan viloyati</button>
+                        <button onclick="selectRegion('Samarqand')">Samarqand viloyati</button>
+                        <button onclick="selectRegion('Surxondaryo')">Surxondaryo viloyati</button>
+                        <button onclick="selectRegion('Sirdaryo')">Sirdaryo viloyati</button>
+                        <button onclick="selectRegion('Toshkent')">Toshkent viloyati</button>
+                        <button onclick="selectRegion('Farg‘ona')">Farg‘ona viloyati</button>
+                        <button onclick="selectRegion('Xorazm')">Xorazm viloyati</button>
+                    </div>
+                </div>
+
+                <!-- Til tanlash tugmalari (o'ng tomonda) -->
+                <div class="language-selector">
+                    <button type="button" class="lang-btn" onclick="changeLanguage('uz')">🇺🇿 O'zbek</button>
+                    <button type="button" class="lang-btn" onclick="changeLanguage('en')">🇬🇧 English</button>
+                    <button type="button" class="lang-btn" onclick="changeLanguage('ru')">🇷🇺 Русский</button>
+                </div>
+
                 <div class="logo">
                     <span class="logo-icon">🏥</span>
                     <span class="logo-text">Sihat AI</span>
@@ -27,6 +56,7 @@
                 <p class="tagline" id="tagline">Sun'iy intellekt asosida sog'lig'ingizni baholang</p>
             </div>
 
+            <!-- FORMA QISMI -->
             <form id="healthForm" class="health-form">
                 <div class="form-row">
                     <div class="form-group">
@@ -57,35 +87,36 @@
                     <label id="bpLabel">Qon bosimi</label>
                     <input type="text" id="bloodPressure" placeholder="120/80" value="140/90">
                 </div>
-	
-<div class="form-group">
-    <label id="sleepLabel">🌙 Uyqu sifati (1-10)</label>
-    <input type="number" id="sleepQuality" min="1" max="10" value="7" required>
-</div>
 
-<div class="form-group">
-    <label id="moodLabel">😔 Kayfiyat (1-10)</label>
-    <input type="number" id="mood" min="1" max="10" value="7" required>
-</div>
+                <div class="form-group">
+                    <label id="sleepLabel">🌙 Uyqu sifati (1-10)</label>
+                    <input type="number" id="sleepQuality" min="1" max="10" value="7" required>
+                </div>
 
-<div class="form-group">
-    <label id="alcoholLabel">🍺 Spirtli ichimlik (haftada)</label>
-    <select id="alcohol">
-        <option value="0">Yo'q</option>
-        <option value="1">1-2 marta</option>
-        <option value="2">3-5 marta</option>
-        <option value="3">Har kuni</option>
-    </select>
-</div>
+                <div class="form-group">
+                    <label id="moodLabel">😔 Kayfiyat (1-10)</label>
+                    <input type="number" id="mood" min="1" max="10" value="7" required>
+                </div>
 
-<div class="form-group">
-    <label id="jointLabel">🦴 Bo'g'im og'rig'i</label>
-    <select id="jointPain">
-        <option value="0">Yo'q</option>
-        <option value="1">Ba'zida</option>
-        <option value="2">Doimiy</option>
-    </select>
-</div>
+                <div class="form-group">
+                    <label id="alcoholLabel">🍺 Spirtli ichimlik (haftada)</label>
+                    <select id="alcohol">
+                        <option value="0">Yo'q</option>
+                        <option value="1">1-2 marta</option>
+                        <option value="2">3-5 marta</option>
+                        <option value="3">Har kuni</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label id="jointLabel">🦴 Bo'g'im og'rig'i</label>
+                    <select id="jointPain">
+                        <option value="0">Yo'q</option>
+                        <option value="1">Ba'zida</option>
+                        <option value="2">Doimiy</option>
+                    </select>
+                </div>
+
                 <div class="checkbox-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="smoking"> <span id="smokingLabel">Chekaman</span>
@@ -95,12 +126,25 @@
                     </label>
                 </div>
 
-                <button type="submit" class="btn-primary" id="submitBtn">
-                    🔍 BAHOLASH
-                </button>
+                <button type="submit" class="btn-primary" id="submitBtn">🔍 BAHOLASH</button>
             </form>
 
-            <!-- Sozlamalar paneli -->
+            <!-- LOKATSIYA BO'LIMI -->
+            <div class="location-finder">
+                <h4 id="locationTitle">📍 Atrofingizdagi klinikalar</h4>
+                <div class="form-group">
+                    <label id="specialtyLabel">🏥 Kasallik turi:</label>
+                    <select id="specialtySelect">
+                        <option value="kardiologiya">Yurak kasalliklari (Kardiologiya)</option>
+                        <option value="endokrinologiya">Diabet va endokrin kasalliklar</option>
+                        <option value="nevrologiya">Nevrologiya (asab tizimi)</option>
+                    </select>
+                </div>
+                <button type="button" onclick="findClinics()" class="clinic-btn">🔍 Klinikalarni topish</button>
+                <div id="clinicResults" class="clinic-results" style="display: none;"></div>
+            </div>
+
+            <!-- SOZLAMALAR PANELI -->
             <div class="settings-panel">
                 <h4 id="settingsTitle">⚙️ Sozlamalar</h4>
                 <label class="checkbox-label">
@@ -112,6 +156,7 @@
                 <button type="button" onclick="saveSettings()" class="settings-btn" id="saveSettingsBtn">Saqlash</button>
             </div>
 
+            <!-- NATIJA BO'LIMI -->
             <div id="result" class="result-card" style="display: none;">
                 <div class="result-header">
                     <span id="resultTitle">📊 Sog'liq hisoboti</span>
