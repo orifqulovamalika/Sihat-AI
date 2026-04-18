@@ -24,7 +24,7 @@ async def assess_risk(data: HealthData):
     try:
         bmi = model.calculate_bmi(data.weight_kg, data.height_cm)
         bmi_category = model.get_bmi_category(bmi)
-        
+
         result = model.predict_risk(
             age=data.age,
             bmi=bmi,
@@ -36,12 +36,10 @@ async def assess_risk(data: HealthData):
             alcohol=data.alcohol,
             joint_pain=data.joint_pain
         )
-        
+
         # Tavsiyalarni formatlash
-                # Tavsiyalarni formatlash
         recommendations_list = []
         for rec in result["recommendations"]:
-            # Deadlineni matn asosida aniqlash
             if "❗" in rec or "Kardiolog" in rec or "shifokorga" in rec:
                 priority = "yuqori"
                 deadline = "1 hafta ichida"
@@ -60,14 +58,13 @@ async def assess_risk(data: HealthData):
             else:
                 priority = "past"
                 deadline = "3 oy ichida"
-            
+
             recommendations_list.append({
                 "priority": priority,
                 "text": rec,
                 "deadline": deadline
             })
 
-        
         return {
             "success": True,
             "data": {
