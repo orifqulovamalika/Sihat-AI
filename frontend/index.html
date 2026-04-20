@@ -14,14 +14,12 @@
         <div class="health-card">
             <!-- HEADER QISMI -->
             <div class="header">
-                <!-- 3 ta nuqta menyu tugmasi (chap tomonda - VILOYATLAR) -->
                 <div class="menu-icon" onclick="toggleMenu()">
                     <div class="bar"></div>
                     <div class="bar"></div>
                     <div class="bar"></div>
                 </div>
 
-                <!-- Viloyatlar menyusi -->
                 <div id="regionMenu" class="region-menu" style="display: none;">
                     <div class="region-list">
                         <h4>📍 Viloyatingizni tanlang</h4>
@@ -121,6 +119,43 @@
 
                 <button type="submit" class="btn-primary" id="submitBtn">🔍 BAHOLASH</button>
             </form>
+
+            <!-- FAVQULODDA HOLATLAR BO'LIMI -->
+            <div class="emergency-section">
+                <h4>🚨 Favqulodda holatlar</h4>
+                <p>Agar quyidagi belgilarni sezsangiz, darhol tekshiruvdan o'ting:</p>
+                <div class="symptoms-grid">
+                    <button class="symptom-btn" onclick="checkSymptom('koz_qorongilashishi')">👁️ Ko'z oldi qorong'ilashishi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('bosh_aylanishi')">🌀 Bosh aylanishi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('kongil_aynishi')">🤢 Ko'ngil aynishi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('kuchli_bosh_ogrigi')">🤕 Kuchli bosh og'rig'i</button>
+                    <button class="symptom-btn" onclick="checkSymptom('kokrak_ogrigi')">💔 Ko'krak og'rig'i</button>
+                    <button class="symptom-btn" onclick="checkSymptom('nafas_qisishi')">😮‍💨 Nafas qisishi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('qulog_shangillashi')">🔔 Quloq shang'illashi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('yurak_urishi')">💓 Yurak tez urishi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('qon_ketishi')">🩸 Qon ketishi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('hushidan_ketish')">😵 Hushidan ketish</button>
+                    <button class="symptom-btn" onclick="checkSymptom('tana_tirishishi')">🥴 Tana qattiq taranglashishi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('qattiq_titrash')">❄️ Qattiq titrash</button>
+                    <button class="symptom-btn" onclick="checkSymptom('gapirish_qiyinlashi')">🗣️ Gapirish qiyinlashishi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('yuz_tirishishi')">😖 Yuz qattiq taranglashishi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('qol_oyoq_shishi')">🦶 Qo'l-oyoq shishi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('teri_qizarishi')">🔥 Teri qizarishi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('isitma')">🌡️ Isitma (38°C dan yuqori)</button>
+                    <button class="symptom-btn" onclick="checkSymptom('qusish')">🤮 Qusish</button>
+                    <button class="symptom-btn" onclick="checkSymptom('ich_ketishi')">💩 Ich ketishi</button>
+                    <button class="symptom-btn" onclick="checkSymptom('qorin_ogrigi')">🤰 Qorin og'rig'i</button>
+                </div>
+                <div id="symptomResult" class="symptom-result" style="display: none;"></div>
+            </div>
+
+            <!-- TEZ YORDAM TUGMASI -->
+            <div class="ambulance-section">
+                <button id="ambulanceBtn" class="ambulance-btn" onclick="callAmbulance()">
+                    🚑 TEZ YORDAM CHAQIRISH (103)
+                </button>
+                <div id="ambulanceResult" class="ambulance-result" style="display: none;"></div>
+            </div>
 
             <!-- LOKATSIYA BO'LIMI -->
             <div class="location-finder">
