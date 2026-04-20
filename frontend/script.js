@@ -113,28 +113,148 @@ function showSelectedRegion() {
     }
 }
 
-// ========== FAVQULODDA HOLATLAR (20 TA) ==========
+// ========== FAVQULODDA HOLATLAR (20 TA) - KASALLIK ASORATLARI BILAN ==========
 const symptomsData = {
-    koz_qorongilashishi: { name: "Ko'z oldi qorong'ilashishi", possible: ["Gipertonik kriz", "Bosh miya qon aylanishi buzilishi", "Qon bosimi keskin o'zgarishi", "Ortostatik gipotenziya", "Anemiya"], action: "Darhol qon bosimini o'lchang. O'tiring yoki yoting. Agar bosim 180/120 dan yuqori bo'lsa, tez yordam chaqiring!", risk: "yuqori" },
-    bosh_aylanishi: { name: "Bosh aylanishi", possible: ["Vestibulyar apparat buzilishi", "Qon bosimi pastligi", "Anemiya", "Qon tomir muammolari", "Diabet", "Stress"], action: "O'tiring yoki yoting. Sekin-asta suv iching. Biror narsaga mahkam ushlang.", risk: "o'rta" },
-    kongil_aynishi: { name: "Ko'ngil aynishi", possible: ["Oshqozon-ichak muammolari", "Gipertoniya", "Meniere kasalligi", "Stress", "Homiladorlik", "Ovqat zaharlanishi"], action: "Toza havoga chiqing. Yalpiz choyi iching. Agar qusish bo'lsa, tez yordam chaqiring.", risk: "o'rta" },
-    kuchli_bosh_ogrigi: { name: "Kuchli bosh og'rig'i", possible: ["Migren", "Gipertoniya", "Bosh miya bosimi oshishi", "Klasterli og'riq", "Meningit"], action: "Qorong'i xonada dam oling. Sovuq kompress qo'ying. Agar og'riq kuchli bo'lsa, tez yordam chaqiring.", risk: "yuqori" },
-    kokrak_ogrigi: { name: "Ko'krak og'rig'i", possible: ["Yurak xuruji", "Angina pektoris", "O'pka emboliyasi", "Perikardit", "Plevrit"], action: "🚨 SHOSHILINCH! Tez yordam chaqiring (103). O'tirgan holatda turing.", risk: "hayotiy" },
-    nafas_qisishi: { name: "Nafas qisishi", possible: ["Astma", "Yurak yetishmovchiligi", "Pnevmoniya", "Allergiya", "COVID-19"], action: "O'tirgan holatda nafas olishga harakat qiling. Derazani oching.", risk: "yuqori" },
-    qulog_shangillashi: { name: "Quloq shang'illashi", possible: ["Qon bosimi oshishi", "Quloq infeksiyasi", "Meniere kasalligi", "Tinnitus"], action: "Qon bosimingizni o'lchang. Tinch xonada dam oling.", risk: "o'rta" },
-    yurak_urishi: { name: "Yurak tez urishi", possible: ["Taxikardiya", "Aritmiya", "Qalqonsimon bez kasalligi", "Anemiya", "Stress"], action: "Tinch xonada o'tiring. Chuqur nafas oling. Agar 10 daqiqadan o'tmasa, tez yordam chaqiring.", risk: "yuqori" },
-    qon_ketishi: { name: "Qon ketishi", possible: ["Travma", "Yara", "Operatsiyadan keyingi asorat", "Ichki qon ketish"], action: "🚨 SHOSHILINCH! Qon ketish joyiga toza mato bosib turing. Tez yordam chaqiring (103)!", risk: "hayotiy" },
-    hushidan_ketish: { name: "Hushidan ketish", possible: ["Qon bosimi keskin pasayishi", "Yurak muammolari", "Epilepsiya", "Qand miqdorining pasayishi"], action: "🚨 SHOSHILINCH! Tez yordam chaqiring (103)! Shaxsni yonbosh yotqizib, nafas olishini tekshiring.", risk: "hayotiy" },
-    tana_tirishishi: { name: "Tana qattiq taranglashishi", possible: ["Epilepsiya", "Isitma", "Meningit", "Tetanus", "Elektrolitlar buzilishi"], action: "🚨 SHOSHILINCH! Tez yordam chaqiring (103)! Shaxsni yonbosh yotqizib, og'ziga hech narsa solmang.", risk: "hayotiy" },
-    qattiq_titrash: { name: "Qattiq titrash", possible: ["Isitma", "Sepsis", "Gipotermiya", "Malariya", "Infeksiya"], action: "Issiq adyol bilan yoping. Isitmani o'lchang. Agar 39°C dan yuqori bo'lsa, tez yordam chaqiring.", risk: "yuqori" },
-    gapirish_qiyinlashi: { name: "Gapirish qiyinlashishi", possible: ["Insult", "Bosh miya shikastlanishi", "Nevrologik kasallik"], action: "🚨 SHOSHILINCH! Tez yordam chaqiring (103)! Insult belgilari: yuz tirishishi, qo'l zaifligi.", risk: "hayotiy" },
-    yuz_tirishishi: { name: "Yuz qattiq taranglashishi", possible: ["Insult", "Bell palsi", "Nevrit", "Bosh miya shikastlanishi"], action: "🚨 SHOSHILINCH! Tez yordam chaqiring (103)! Tabassum qilishga harakat qiling.", risk: "hayotiy" },
-    qol_oyoq_shishi: { name: "Qo'l-oyoq shishi", possible: ["Yurak yetishmovchiligi", "Buyrak yetishmovchiligi", "Jigar sirozi", "Tromboz"], action: "Oyoqlarni baland ko'taring. Tuzni kamaytiring. Agar bir oyog'ingiz shishgan bo'lsa, tez yordam chaqiring.", risk: "yuqori" },
-    teri_qizarishi: { name: "Teri qizarishi", possible: ["Allergiya", "Infeksiya", "Autoimmun kasallik", "Quyosh yonishi"], action: "Antigistamin qabul qiling. Sovuq kompress qo'ying. Agar nafas qisishi bilan birga bo'lsa, tez yordam chaqiring.", risk: "o'rta" },
-    isitma: { name: "Isitma (38°C dan yuqori)", possible: ["Virusli infeksiya", "Bakterial infeksiya", "Sepsis", "Gripp"], action: "Ko'p suv iching. Paratsetamol qabul qiling. Agar 3 kundan oshsa yoki 40°C dan yuqori bo'lsa, tez yordam chaqiring.", risk: "yuqori" },
-    qusish: { name: "Qusish", possible: ["Ovqat zaharlanishi", "Oshqozon-ichak infeksiyasi", "Migren", "Homiladorlik"], action: "Kichik yudumlarda suv iching. Agar qonda qusish yoki 24 soatdan oshsa, tez yordam chaqiring.", risk: "o'rta" },
-    ich_ketishi: { name: "Ich ketishi", possible: ["Ovqat zaharlanishi", "Infeksiya", "IBS", "Antibiotiklar"], action: "Ko'p suv iching. Oralit iching. Agar qonda bo'lsa yoki 3 kundan oshsa, shifokorga murojaat qiling.", risk: "o'rta" },
-    qorin_ogrigi: { name: "Qorin og'rig'i", possible: ["Appenditsit", "Oshqozon yarasi", "Pankreatit", "Xoletsistit", "Buyrak toshi"], action: "Agar og'riq o'ng pastki tomonda bo'lsa, appenditsit bo'lishi mumkin. Darhol shifokorga murojaat qiling.", risk: "yuqori" }
+    koz_qorongilashishi: { 
+        name: "Ko'z oldi qorong'ilashishi", 
+        possible: ["Gipertonik kriz", "Bosh miya qon aylanishi buzilishi", "Qon bosimi keskin o'zgarishi", "Ortostatik gipotenziya", "Anemiya"], 
+        action: "Darhol qon bosimini o'lchang. O'tiring yoki yoting. Agar bosim 180/120 dan yuqori bo'lsa, tez yordam chaqiring!", 
+        risk: "yuqori",
+        complications: "Agar davolanmasa: insult, yurak xuruji, ko'rish qobiliyatini yo'qotish, buyrak yetishmovchiligi"
+    },
+    bosh_aylanishi: { 
+        name: "Bosh aylanishi", 
+        possible: ["Vestibulyar apparat buzilishi", "Qon bosimi pastligi", "Anemiya", "Qon tomir muammolari", "Diabet", "Stress"], 
+        action: "O'tiring yoki yoting. Sekin-asta suv iching. Biror narsaga mahkam ushlang.", 
+        risk: "o'rta",
+        complications: "Uzoq davom etsa: yiqilish, jarohatlar, ish qobiliyatini yo'qotish, depressiya"
+    },
+    kongil_aynishi: { 
+        name: "Ko'ngil aynishi", 
+        possible: ["Oshqozon-ichak muammolari", "Gipertoniya", "Meniere kasalligi", "Stress", "Homiladorlik", "Ovqat zaharlanishi"], 
+        action: "Toza havoga chiqing. Yalpiz choyi iching. Agar qusish bo'lsa, tez yordam chaqiring.", 
+        risk: "o'rta",
+        complications: "Suvsizlanish, elektrolitlar buzilishi, ovqatlanish buzilishi"
+    },
+    kuchli_bosh_ogrigi: { 
+        name: "Kuchli bosh og'rig'i", 
+        possible: ["Migren", "Gipertoniya", "Bosh miya bosimi oshishi", "Klasterli og'riq", "Meningit"], 
+        action: "Qorong'i xonada dam oling. Sovuq kompress qo'ying. Agar og'riq kuchli bo'lsa, tez yordam chaqiring.", 
+        risk: "yuqori",
+        complications: "Miya shishi, insult, ko'rish buzilishi, hayot sifatining pasayishi"
+    },
+    kokrak_ogrigi: { 
+        name: "Ko'krak og'rig'i", 
+        possible: ["Yurak xuruji", "Angina pektoris", "O'pka emboliyasi", "Perikardit", "Plevrit"], 
+        action: "🚨 SHOSHILINCH! Tez yordam chaqiring (103). O'tirgan holatda turing.", 
+        risk: "hayotiy",
+        complications: "Yurak to'xtashi, miokard infarkti, o'lim, yurak yetishmovchiligi"
+    },
+    nafas_qisishi: { 
+        name: "Nafas qisishi", 
+        possible: ["Astma", "Yurak yetishmovchiligi", "Pnevmoniya", "Allergiya", "COVID-19"], 
+        action: "O'tirgan holatda nafas olishga harakat qiling. Derazani oching.", 
+        risk: "yuqori",
+        complications: "Gipoksiya, o'pka fibrozi, nafas yetishmovchiligi, o'lim"
+    },
+    qulog_shangillashi: { 
+        name: "Quloq shang'illashi", 
+        possible: ["Qon bosimi oshishi", "Quloq infeksiyasi", "Meniere kasalligi", "Tinnitus"], 
+        action: "Qon bosimingizni o'lchang. Tinch xonada dam oling.", 
+        risk: "o'rta",
+        complications: "Eshitish qobiliyatini yo'qotish, doimiy shovqin, uyqusizlik, depressiya"
+    },
+    yurak_urishi: { 
+        name: "Yurak tez urishi", 
+        possible: ["Taxikardiya", "Aritmiya", "Qalqonsimon bez kasalligi", "Anemiya", "Stress"], 
+        action: "Tinch xonada o'tiring. Chuqur nafas oling. Agar 10 daqiqadan o'tmasa, tez yordam chaqiring.", 
+        risk: "yuqori",
+        complications: "Yurak yetishmovchiligi, insult, yurak to'xtashi, qon quyqalari"
+    },
+    qon_ketishi: { 
+        name: "Qon ketishi", 
+        possible: ["Travma", "Yara", "Operatsiyadan keyingi asorat", "Ichki qon ketish"], 
+        action: "🚨 SHOSHILINCH! Qon ketish joyiga toza mato bosib turing. Tez yordam chaqiring (103)!", 
+        risk: "hayotiy",
+        complications: "Ko'p qon yo'qotish, anemiya, shok, o'lim"
+    },
+    hushidan_ketish: { 
+        name: "Hushidan ketish", 
+        possible: ["Qon bosimi keskin pasayishi", "Yurak muammolari", "Epilepsiya", "Qand miqdorining pasayishi"], 
+        action: "🚨 SHOSHILINCH! Tez yordam chaqiring (103)! Shaxsni yonbosh yotqizib, nafas olishini tekshiring.", 
+        risk: "hayotiy",
+        complications: "Bosh miya shikastlanishi, yiqilish jarohatlari, epilepsiya rivojlanishi"
+    },
+    tana_tirishishi: { 
+        name: "Tana qattiq taranglashishi", 
+        possible: ["Epilepsiya", "Isitma", "Meningit", "Tetanus", "Elektrolitlar buzilishi"], 
+        action: "🚨 SHOSHILINCH! Tez yordam chaqiring (103)! Shaxsni yonbosh yotqizib, og'ziga hech narsa solmang.", 
+        risk: "hayotiy",
+        complications: "Miya shikastlanishi, nafas to'xtashi, o'lim"
+    },
+    qattiq_titrash: { 
+        name: "Qattiq titrash", 
+        possible: ["Isitma", "Sepsis", "Gipotermiya", "Malariya", "Infeksiya"], 
+        action: "Issiq adyol bilan yoping. Isitmani o'lchang. Agar 39°C dan yuqori bo'lsa, tez yordam chaqiring.", 
+        risk: "yuqori",
+        complications: "Sepsis, organ yetishmovchiligi, o'lim"
+    },
+    gapirish_qiyinlashi: { 
+        name: "Gapirish qiyinlashishi", 
+        possible: ["Insult", "Bosh miya shikastlanishi", "Nevrologik kasallik"], 
+        action: "🚨 SHOSHILINCH! Tez yordam chaqiring (103)! Insult belgilari: yuz tirishishi, qo'l zaifligi.", 
+        risk: "hayotiy",
+        complications: "Doimiy nutq buzilishi, falaj, o'lim"
+    },
+    yuz_tirishishi: { 
+        name: "Yuz qattiq taranglashishi", 
+        possible: ["Insult", "Bell palsi", "Nevrit", "Bosh miya shikastlanishi"], 
+        action: "🚨 SHOSHILINCH! Tez yordam chaqiring (103)! Tabassum qilishga harakat qiling.", 
+        risk: "hayotiy",
+        complications: "Doimiy yuz falaji, ovqatlanish qiyinlishuvi, depressiya"
+    },
+    qol_oyoq_shishi: { 
+        name: "Qo'l-oyoq shishi", 
+        possible: ["Yurak yetishmovchiligi", "Buyrak yetishmovchiligi", "Jigar sirozi", "Tromboz"], 
+        action: "Oyoqlarni baland ko'taring. Tuzni kamaytiring. Agar bir oyog'ingiz shishgan bo'lsa, tez yordam chaqiring.", 
+        risk: "yuqori",
+        complications: "Tromboz, o'pka emboliyasi, yurak yetishmovchiligi"
+    },
+    teri_qizarishi: { 
+        name: "Teri qizarishi", 
+        possible: ["Allergiya", "Infeksiya", "Autoimmun kasallik", "Quyosh yonishi"], 
+        action: "Antigistamin qabul qiling. Sovuq kompress qo'ying. Agar nafas qisishi bilan birga bo'lsa, tez yordam chaqiring.", 
+        risk: "o'rta",
+        complications: "Anafilaktik shok, teri yaralari, infeksiya tarqalishi"
+    },
+    isitma: { 
+        name: "Isitma (38°C dan yuqori)", 
+        possible: ["Virusli infeksiya", "Bakterial infeksiya", "Sepsis", "Gripp"], 
+        action: "Ko'p suv iching. Paratsetamol qabul qiling. Agar 3 kundan oshsa yoki 40°C dan yuqori bo'lsa, tez yordam chaqiring.", 
+        risk: "yuqori",
+        complications: "Sepsis, organ yetishmovchiligi, konvulsiya (bolalarda)"
+    },
+    qusish: { 
+        name: "Qusish", 
+        possible: ["Ovqat zaharlanishi", "Oshqozon-ichak infeksiyasi", "Migren", "Homiladorlik"], 
+        action: "Kichik yudumlarda suv iching. Agar qonda qusish yoki 24 soatdan oshsa, tez yordam chaqiring.", 
+        risk: "o'rta",
+        complications: "Suvsizlanish, elektrolitlar buzilishi, Mallory-Veys sindromi"
+    },
+    ich_ketishi: { 
+        name: "Ich ketishi", 
+        possible: ["Ovqat zaharlanishi", "Infeksiya", "IBS", "Antibiotiklar"], 
+        action: "Ko'p suv iching. Oralit iching. Agar qonda bo'lsa yoki 3 kundan oshsa, shifokorga murojaat qiling.", 
+        risk: "o'rta",
+        complications: "Suvsizlanish, elektrolitlar buzilishi, gipotension shok"
+    },
+    qorin_ogrigi: { 
+        name: "Qorin og'rig'i", 
+        possible: ["Appenditsit", "Oshqozon yarasi", "Pankreatit", "Xoletsistit", "Buyrak toshi"], 
+        action: "Agar og'riq o'ng pastki tomonda bo'lsa, appenditsit bo'lishi mumkin. Darhol shifokorga murojaat qiling.", 
+        risk: "yuqori",
+        complications: "Appenditsit yorilishi, peritonit, sepsis, o'lim"
+    }
 };
 
 function checkSymptom(symptom) {
@@ -146,6 +266,7 @@ function checkSymptom(symptom) {
     let diagnosis = symData.possible.join(", ");
     let recommendation = symData.action;
     let riskLevel = symData.risk;
+    let complications = symData.complications;
     
     if (bp) {
         const systolic = parseInt(bp.split('/')[0]);
@@ -157,19 +278,22 @@ function checkSymptom(symptom) {
     
     let riskText = riskLevel === "hayotiy" ? "🚨 HAYOTIY XAVF!" : (riskLevel === "yuqori" ? "🔴 YUQORI XAVF" : "🟡 O'RTA XAVF");
     let riskColor = riskLevel === "hayotiy" ? "#d32f2f" : (riskLevel === "yuqori" ? "#f44336" : "#ff9800");
+    let riskClass = riskLevel === "hayotiy" ? "symptom-high-risk" : (riskLevel === "yuqori" ? "symptom-high-risk" : "symptom-medium-risk");
     
-    let html = `<div class="symptom-high-risk" style="border-left-color: ${riskColor};">
+    let html = `<div class="${riskClass}" style="border-left-color: ${riskColor};">
         <strong>⚠️ Semptom:</strong> ${symData.name}<br>
         <strong>🏥 Mumkin bo'lgan kasalliklar:</strong> ${diagnosis}<br>
         <strong>📊 Xavf darajasi:</strong> <span style="color:${riskColor};">${riskText}</span><br>
         <strong>💊 Tavsiya:</strong> ${recommendation}<br>
-        ${riskLevel === "hayotiy" ? '<strong style="color:#d32f2f;">🚨 DARHOL TEZ YORDAM CHAQIRING! (103)</strong>' : ''}
+        <div class="complications">
+            <strong>⚠️ KASALLIK ASORATLARI (davolanmasa):</strong><br>
+            ${complications}
+        </div>
+        ${riskLevel === "hayotiy" ? '<strong style="color:#d32f2f; display:block; margin-top:0.5rem;">🚨 DARHOL TEZ YORDAM CHAQIRING! (103)</strong>' : ''}
     </div>`;
     resultDiv.innerHTML = html;
     resultDiv.style.display = 'block';
-}
-
-// ========== TEZ YORDAM ==========
+}// ========== TEZ YORDAM ==========
 function callAmbulance() {
     const resultDiv = document.getElementById('ambulanceResult');
     const userLocation = selectedRegion || "Viloyat tanlanmagan";

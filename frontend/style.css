@@ -362,3 +362,71 @@ body {
     .symptoms-grid { gap: 0.3rem; }
     .symptom-btn { padding: 0.3rem 0.7rem; font-size: 0.7rem; }
 }
+/* Favqulodda holatlar tugmalari - yangi rang */
+.symptom-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 2rem;
+    color: white;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.symptom-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, #ff4757, #ff6b6b);
+}
+
+.symptom-btn:active {
+    transform: translateY(1px);
+}
+
+/* Semptom natija qismi - kasallik asoratlari uchun */
+.symptom-result {
+    background: #f0f8ff;
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-top: 1rem;
+    border: 1px solid #ddd;
+}
+
+.symptom-high-risk {
+    background: #fff0f0;
+    border-left: 5px solid #d32f2f;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.symptom-medium-risk {
+    background: #fff8e1;
+    border-left: 5px solid #ff9800;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.symptom-low-risk {
+    background: #e8f5e9;
+    border-left: 5px solid #4caf50;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.complications {
+    margin-top: 0.8rem;
+    padding: 0.8rem;
+    background: #fff3cd;
+    border-radius: 0.5rem;
+    border-left: 3px solid #ff9800;
+}
+
+.complications strong {
+    color: #856404;
+}
