@@ -149,6 +149,75 @@
     <div id="symptomResult" class="symptom-result" style="display: none;"></div>
 </div>
 
+<!-- BIR NECHTA SEMPTOMLARNI TANLASH TIZIMI -->
+<div class="multi-symptom-section">
+    <h4>🔍 Bir nechta semptomlarni tanlang</h4>
+    <p>O'zingizda kuzatilgan semptomlarni belgilang va "Tashxis qo'yish" tugmasini bosing:</p>
+    <div class="multi-symptoms-grid">
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="koz_qorongilashishi"> 👁️ Ko'z oldi qorong'ilashishi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="bosh_aylanishi"> 🌀 Bosh aylanishi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="kongil_aynishi"> 🤢 Ko'ngil aynishi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="kuchli_bosh_ogrigi"> 🤕 Kuchli bosh og'rig'i
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="kokrak_ogrigi"> 💔 Ko'krak og'rig'i
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="nafas_qisishi"> 😮‍💨 Nafas qisishi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="qulog_shangillashi"> 🔔 Quloq shang'illashi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="yurak_urishi"> 💓 Yurak tez urishi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="qon_ketishi"> 🩸 Qon ketishi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="hushidan_ketish"> 😵 Hushidan ketish
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="tana_tirishishi"> 🥴 Tana qattiq taranglashishi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="qattiq_titrash"> ❄️ Qattiq titrash
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="gapirish_qiyinlashi"> 🗣️ Gapirish qiyinlashishi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="yuz_tirishishi"> 😖 Yuz qattiq taranglashishi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="qol_oyoq_shishi"> 🦶 Qo'l-oyoq shishi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="teri_qizarishi"> 🔥 Teri qizarishi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="isitma"> 🌡️ Isitma
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="qusish"> 🤮 Qusish
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="ich_ketishi">  Ich ketishi
+        </label>
+        <label class="multi-symptom-checkbox">
+            <input type="checkbox" class="symptom-checkbox" value="qorin_ogrigi">  Qorin og'rig'i
+        </label>
+    </div>
+    <button class="diagnose-btn" onclick="diagnoseMultipleSymptoms()">🔬 TAShXIS QO'YISH</button>
+    <div id="multiDiagnosisResult" class="multi-diagnosis-result" style="display: none;"></div>
+</div>
 <!-- TEZ YORDAM TUGMASI -->
 <div class="ambulance-section">
     <button id="ambulanceBtn" class="ambulance-btn" onclick="callAmbulance()">
