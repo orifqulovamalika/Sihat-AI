@@ -547,3 +547,145 @@ function getRiskText(risk) {
         default: return '🟢 PAST XAVF - Profilaktik tekshiruv';
     }
 }
+// ========== BIR NECHTA SEMPTOMLARNI TAShXIS QILISH ==========
+function diagnoseMultipleSymptoms() {
+    const checkboxes = document.querySelectorAll('.symptom-checkbox:checked');
+    const selectedSymptoms = Array.from(checkboxes).map(cb => cb.value);
+    const resultDiv = document.getElementById('multiDiagnosisResult');
+    
+    if (!resultDiv) {
+        console.error("multiDiagnosisResult elementi topilmadi!");
+        return;
+    }
+    
+    if (selectedSymptoms.length === 0) {
+        resultDiv.innerHTML = '<div style="background:#fff3cd; padding:1rem; border-radius:0.8rem; color:#856404;">⚠️ Iltimos, kamida bitta semptomni tanlang!</div>';
+        resultDiv.style.display = 'block';
+        return;
+    }
+    
+    // Semptomlarni tahlil qilish
+    const analysis = analyzeSymptoms(selectedSymptoms);
+    
+    let html = `
+        <div style="margin-bottom: 1rem;">
+            <strong>📋 Tanlangan semptomlar (${selectedSymptoms.length}):</strong><br>
+            ${selectedSymptoms.map(s => symptomsData[s]?.name || s).join(', ')}
+        </div>
+        <div><strong>🔬 TAShXIS NATIJALARI:</strong></div>
+    `;
+    
+    // Eng yuqori xavf darajasidagi kasalliklarni chiqarish
+    if (analysis.possibleDiseases.length > 0) {
+        html += `<div class="diagnosis-disease diagnosis-${analysis.overallRisk}-risk">
+            <strong>🏥 Mumkin bo'lgan kasalliklar:</strong><br>
+            ${analysis.possibleDiseases.map(d => `• ${d.name} (${d.matchCount} ta semptom)`).join('<br>')}
+        </div>`;
+    }
+    
+    // Umumiy xavf darajasi
+    html += `<div class="diagnosis-disease diagnosis-${analysis.overallRisk}-risk">
+        <strong>📊 Umumiy xavf darajasi:</strong> ${getRiskText(analysis.overallRisk)}
+    </div>`;
+    
+    // Tavsiyalar
+    html += `<div class="diagnosis-disease">
+        <strong>💊 Tavsiyalar:</strong><br>
+        ${analysis.recommendations.join('<br>')}
+    </div>`;
+    
+    // Asoratlar
+    if (analysis.complications.length > 0) {
+        html += `<div class="diagnosis-disease">
+            <strong>⚠️ Mumkin bo'lgan asoratlar:</strong><br>
+            ${analysis.complications.slice(0, 5).join('<br>')}
+        </div>`;
+    }
+    
+    // Tez yordam tavsiyasi
+    if (analysis.overallRisk === 'high' || analysis.overallRisk === 'hayotiy') {
+        html += `<div style="background:#ffebee; padding:1rem; border-radius:0.8rem; margin-top:0.8rem; border-left:4px solid #d32f2f;">
+            <strong style="color:#d32f2f;">🚨 DARHOL SHIFOKORGA MUROJAAT QILING! </strong>
+            <button onclick="callAmbulance()" style="background:#d32f2f; color:white; border:none; padding:0.5rem 1rem; border-radius:2rem; margin-left:0.5rem; cursor:pointer;">📞 TEZ YORDAM (103)</button>
+        </div>`;
+    }
+    
+    resultDiv.innerHTML = html;
+    resultDiv.style.display = 'block';
+}
+
+function analyzeSymptoms(symptomIds) {
+    const possibleDiseases = new Map();
+    const allComplications = [];
+    
+    symptomIds.forEach(symptomId => {
+        const symptom = symptomsData[symptomId];
+        if (symptom) {
+            symptom.possible.forEach(disease => {
+                if (!possibleDiseases.has(disease)) {
+                    possibleDiseases.set(disease, { count: 0, risks: [], complications: [] });
+                }
+                const data = possibleDiseases.get(disease);
+                data.count++;
+                data.risks.push(symptom.risk);
+                if (symptom.complications) {
+                    data.complications.push(symptom.complications);
+                    allComplications.push(symptom.complications);
+                }
+            });
+        }
+    });
+    
+    const sortedDiseases = Array.from(possibleDiseases.entries())
+        .map(([name, data]) => ({ name, matchCount: data.count, risks: data.risks, complications: data.complications }))
+        .sort((a, b) => b.matchCount - a.matchCount)
+        .slice(0, 5);
+    
+    const allRisks = sortedDiseases.flatMap(d => d.risks);
+    let overallRisk = 'low';
+    if (allRisks.includes('hayotiy')) {
+        overallRisk = 'hayotiy';
+    } else if (allRisks.includes('yuqori')) {
+        overallRisk = 'high';
+    } else if (allRisks.includes('o\'rta')) {
+        overallRisk = 'medium';
+    }
+    
+    const recommendations = [];
+    if (overallRisk === 'hayotiy') {
+        recommendations.push('🚨 SHOSHILINCH! Tez yordam chaqiring (103)!');
+        recommendations.push('🏥 Darhol shifoxonaga murojaat qiling');
+    } else if (overallRisk === 'high') {
+        recommendations.push('⚠️ 24 soat ichida shifokorga murojaat qiling');
+        recommendations.push('🩺 Qon bosimi va qand miqdorini tekshiring');
+    } else {
+        recommendations.push('📅 1 hafta ichida shifokorga murojaat qiling');
+        recommendations.push('💪 Sog\'lom turmush tarziga o\'ting');
+    }
+    
+    if (symptomIds.includes('kokrak_ogrigi') || symptomIds.includes('nafas_qisishi')) {
+        recommendations.push('❤️ Yurak va o\'pka tekshiruvidan o\'ting');
+    }
+    if (symptomIds.includes('bosh_aylanishi') || symptomIds.includes('hushidan_ketish')) {
+        recommendations.push('🧠 Nevrologga murojaat qiling');
+    }
+    if (symptomIds.includes('qon_ketishi')) {
+        recommendations.push('🩸 Gemoglobin va qon ivish tekshiruvidan o\'ting');
+    }
+    
+    return {
+        possibleDiseases: sortedDiseases,
+        overallRisk: overallRisk,
+        recommendations: recommendations,
+        complications: [...new Set(allComplications)]
+    };
+}
+
+function getRiskText(risk) {
+    switch(risk) {
+        case 'hayotiy': return '🚨 HAYOTIY XAVF! Darhol tez yordam chaqiring!';
+        case 'high': return '🔴 YUQORI XAVF - Shifokorga murojaat qiling';
+        case 'medium': return '🟡 O\'RTA XAVF - Kuzatuvda bo\'ling';
+        default: return '🟢 PAST XAVF - Profilaktik tekshiruv';
+    }
+}
