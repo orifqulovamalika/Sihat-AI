@@ -14,7 +14,6 @@ app.add_middleware(
 )
 
 app.include_router(health.router)
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
 @app.get("/")
 def root():
@@ -23,3 +22,13 @@ def root():
 @app.get("/hello/{name}")
 def say_hello(name: str):
     return {"message": f"Salom {name}!"}
+
+@app.get("/api/status")
+def status():
+    return {
+        "platform": "Sihat AI",
+        "status": "online",
+        "message": "Platforma ishlayapti"
+    }
+
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
